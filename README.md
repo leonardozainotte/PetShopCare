@@ -45,5 +45,11 @@ Desenvolvimento das rotinas de acesso a dados (CRUD) isolando o código SQL da r
   * `VendaRepository`: Processamento unificado de vendas rápidas ou nominais com controle transacional rigoroso.
   * `OrdemServicoRepository`: Centralização de agendamentos, ordens operacionais e controle de fluxo da agenda.
 
+### 🚧 Etapa 5: Camada de Negócios (Services)
+Implementação da lógica de domínio para isolar regras operacionais da interface gráfica, garantindo consistência e segurança antes do acesso à camada de dados.
+* `CriptografiaService`: Algoritmo SHA-256 para hashing irreversível de senhas.
+* `UsuarioService`: Prevenção de duplicidade de credenciais e validação de autenticação.
+* `ClienteService`: Sanitização de formulários e bloqueio estrutural contra CPFs duplicados.
+
 ---
 *Status Atual: Desenvolvimento contínuo da camada de repositórios.*
