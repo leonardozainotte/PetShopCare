@@ -31,5 +31,12 @@ A base de dados foi projetada com foco em integridade referencial e normalizaç�
 * Uso de propriedades auto-implementadas e tipagem segura para nulidade (`DateTime?`, `decimal?`) em C# para prevenir quebras de `NullReferenceException` durante o mapeamento com o banco.
 * Configuração da classe `DatabaseConfig` aplicando o padrão estático para fornecimento da *Connection String*.
 
+### 🚧 Etapa 4: Camada de Persistência (Repositories)
+Desenvolvimento das rotinas de acesso a dados (CRUD) isolando o código SQL da regra de negócios da aplicação.
+* **Segurança:** Utilização de parâmetros nomeados (`@Parametro`) com Dapper para blindagem total contra *SQL Injection*.
+* **Repositórios Implementados:**
+  * `ClienteRepository`: Gestão de tutores.
+  * `PetRepository`: Gestão de prontuários animais, incluindo o método estratégico `BuscarPorClienteId` para mapeamento da relação 1:N com os tutores.
+
 ---
-*Status Atual: Preparando a camada de persistência (Repositories) e rotinas CRUD.*
+*Status Atual: Desenvolvimento contínuo da camada de repositórios.*
