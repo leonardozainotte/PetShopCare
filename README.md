@@ -28,31 +28,21 @@ A base de dados foi projetada com foco em integridade referencial e normalizaç�
 
 ### ✅ Etapa 3: Mapeamento Objeto-Relacional (Models)
 * Implementação do modelo de domínio anêmico refletindo as tabelas do banco.
-* Uso de propriedades auto-implementadas e tipagem segura para nulidade (`DateTime?`, `decimal?`) em C# para prevenir quebras de `NullReferenceException` durante o mapeamento com o banco.
+* Uso de propriedades auto-implementadas e tipagem segura para nulidade (`DateTime?`, `decimal?`) em C# para prevenir quebras de `NullReferenceException`.
 * Configuração da classe `DatabaseConfig` aplicando o padrão estático para fornecimento da *Connection String*.
 
 ### ✅ Etapa 4: Camada de Persistência (Repositories)
-Desenvolvimento das rotinas de acesso a dados (CRUD) isolando o código SQL da regra de negócios da aplicação.
-* **Segurança:** Utilização de parâmetros nomeados (`@Parametro`) com Dapper para blindagem total contra *SQL Injection*.
-* **Integridade Transacional:** Implementação do padrão ACID na gerência de fluxos operacionais através de transações gerenciadas (`IDbTransaction`). O processamento de vendas realiza a inserção em cascata dos itens, atualização de saldos no inventário e log de auditoria de forma atômica.
-* **Repositórios Implementados:**
-  * `ClienteRepository`: Gestão cadastral de tutores.
-  * `PetRepository`: Prontuários animais e mapeamento relacional 1:N com `BuscarPorClienteId`.
-  * `UsuarioRepository`: Controle de credenciais e subsídio à autenticação operacional.
-  * `ProdutoRepository`: Gestão de inventário e emissão de gatilhos para alertas de estoque mínimo.
-  * `ServicoRepository`: Catálogo e precificação de procedimentos operacionais.
-  * `EstoqueMovimentacaoRepository`: Ledger histórico para auditorias de entradas e saídas físicas.
-  * `VendaRepository`: Processamento unificado de vendas rápidas ou nominais com controle transacional rigoroso.
-  * `OrdemServicoRepository`: Centralização de agendamentos, ordens operacionais e controle de fluxo da agenda.
+Isolamento do código SQL em classes especializadas, garantindo que o restante do sistema desconheça a infraestrutura do banco.
+* **Segurança:** Uso de parâmetros nomeados no Dapper (`@Parametro`) eliminando riscos de *SQL Injection*.
+* **Atomicidade:** Uso de transações (`IDbTransaction`) no `VendaRepository` para processamento atômico em cascata (inserção da venda, itens, baixa de estoque e auditoria).
+* **Mapeamento:** Criação dos repositórios para todas as entidades principais, utilizando aliasing SQL para compatibilização de propriedades (ex: `Usuario AS Login`).
 
 ### ✅ Etapa 5: Camada de Negócios (Services)
-Implementação da lógica de domínio para isolar regras operacionais da interface gráfica, garantindo consistência e segurança antes do acesso à camada de dados.
-* `CriptografiaService`: Algoritmo SHA-256 para hashing irreversível de senhas.
-* `UsuarioService`: Prevenção de duplicidade de credenciais e validação de autenticação.
-* `ClienteService`: Sanitização de formulários e bloqueio estrutural contra CPFs duplicados.
-* `PetService`: Imposição de integridade relacional, impedindo a existência de prontuários órfãos (sem tutor).
-* `ProdutoService`: Travas de proteção de margem de lucro (Preço de Venda vs Preço de Custo) e estruturação do alerta de estoque.
-* `VendaService`: Orquestração de negócio pré-transacional. O serviço inspeciona o saldo físico (`EstoqueAtual`) de cada item via `ProdutoRepository` antes de autorizar a `VendaRepository` a abrir a transação no banco de dados, prevenindo inventário negativo.
+Implementação da barreira sanitária do domínio. Nenhuma informação atinge os repositórios sem validação prévia.
+* **Segurança e Autenticação:** Implementação do `CriptografiaService` (SHA-256) para *hashing* de senhas. Prevenção de duplicidade de credenciais via `UsuarioService`.
+* **Validações Estruturais:** Bloqueio de CPFs duplicados no `ClienteService` e obrigatoriedade de vínculo relacional no `PetService`.
+* **Blindagem Financeira e de Estoque:** `ProdutoService` impede a inserção de margens de lucro negativas. O `VendaService` inspeciona o saldo físico antes de autorizar a abertura de transações no banco, prevenindo inventário negativo.
 
----
-*Status Atual: Desenvolvimento contínuo da camada de repositórios.*
+### 🚧 Etapa 6: Interface e ViewModels (Padrão MVVM)
+Transição para a camada de apresentação rejeitando o uso de *Code-Behind* para lógica de negócios, adotando estritamente o *Data Binding*.
+* **Infraestrutura UI:** Implementação do `ViewModelBase` (`INotifyPropertyChanged`) para reatividade assíncrona da tela e `RelayCommand` (`ICommand`) para o roteamento isolado de eventos de clique.
