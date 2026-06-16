@@ -31,12 +31,19 @@ A base de dados foi projetada com foco em integridade referencial e normalizaç�
 * Uso de propriedades auto-implementadas e tipagem segura para nulidade (`DateTime?`, `decimal?`) em C# para prevenir quebras de `NullReferenceException` durante o mapeamento com o banco.
 * Configuração da classe `DatabaseConfig` aplicando o padrão estático para fornecimento da *Connection String*.
 
-### 🚧 Etapa 4: Camada de Persistência (Repositories)
+### ✅ Etapa 4: Camada de Persistência (Repositories)
 Desenvolvimento das rotinas de acesso a dados (CRUD) isolando o código SQL da regra de negócios da aplicação.
 * **Segurança:** Utilização de parâmetros nomeados (`@Parametro`) com Dapper para blindagem total contra *SQL Injection*.
+* **Integridade Transacional:** Implementação do padrão ACID na gerência de fluxos operacionais através de transações gerenciadas (`IDbTransaction`). O processamento de vendas realiza a inserção em cascata dos itens, atualização de saldos no inventário e log de auditoria de forma atômica.
 * **Repositórios Implementados:**
-  * `ClienteRepository`: Gestão de tutores.
-  * `PetRepository`: Gestão de prontuários animais, incluindo o método estratégico `BuscarPorClienteId` para mapeamento da relação 1:N com os tutores.
+  * `ClienteRepository`: Gestão cadastral de tutores.
+  * `PetRepository`: Prontuários animais e mapeamento relacional 1:N com `BuscarPorClienteId`.
+  * `UsuarioRepository`: Controle de credenciais e subsídio à autenticação operacional.
+  * `ProdutoRepository`: Gestão de inventário e emissão de gatilhos para alertas de estoque mínimo.
+  * `ServicoRepository`: Catálogo e precificação de procedimentos operacionais.
+  * `EstoqueMovimentacaoRepository`: Ledger histórico para auditorias de entradas e saídas físicas.
+  * `VendaRepository`: Processamento unificado de vendas rápidas ou nominais com controle transacional rigoroso.
+  * `OrdemServicoRepository`: Centralização de agendamentos, ordens operacionais e controle de fluxo da agenda.
 
 ---
 *Status Atual: Desenvolvimento contínuo da camada de repositórios.*
