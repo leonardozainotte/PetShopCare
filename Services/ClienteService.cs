@@ -24,7 +24,7 @@ namespace PetShopCare.Services {
                 throw new InvalidOperationException("Já existe um cliente cadastrado com este CPF.");
 
             if (cliente.Id == 0) {
-                cliente.DataCadastro = DateTime.Now;
+                cliente.DataCadastro = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 _repository.Inserir(cliente);
             }
             else {

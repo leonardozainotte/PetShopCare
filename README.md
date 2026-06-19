@@ -43,6 +43,14 @@ Implementação da barreira sanitária do domínio. Nenhuma informação atinge 
 * **Validações Estruturais:** Bloqueio de CPFs duplicados no `ClienteService` e obrigatoriedade de vínculo relacional no `PetService`.
 * **Blindagem Financeira e de Estoque:** `ProdutoService` impede a inserção de margens de lucro negativas. O `VendaService` inspeciona o saldo físico antes de autorizar a abertura de transações no banco, prevenindo inventário negativo.
 
-### 🚧 Etapa 6: Interface e ViewModels (Padrão MVVM)
+### ✅ Etapa 6: Interface e ViewModels (Padrão MVVM)
 Transição para a camada de apresentação rejeitando o uso de *Code-Behind* para lógica de negócios, adotando estritamente o *Data Binding*.
 * **Infraestrutura UI:** Implementação do `ViewModelBase` (`INotifyPropertyChanged`) para reatividade assíncrona da tela e `RelayCommand` (`ICommand`) para o roteamento isolado de eventos de clique.
+* **Navegação Dinâmica:** Estruturação do `MainView` atuando como contêiner principal (`ContentControl`), injetando *UserControls* (como `TutorView`) dinamicamente via comandos, sem acoplamento de múltiplas janelas.
+* **Estabilização de Compilação:** Supressão estratégica de avisos de nulidade global (C# 8.0+) e resolução de conflitos de tipos, garantindo um ambiente de compilação limpo (zero erros ou *warnings*).
+* **Conexão UI-Banco:** Integração do fluxo de leitura do SQLite (via Dapper) com a `DataGrid` da interface.
+
+### 🚧 Etapa 7: Operações CRUD na Interface (Em Andamento)
+* Modelagem dos formulários de entrada de dados para inserção e atualização.
+* Implementação do fluxo completo de gravação (View -> ViewModel -> Service -> Repository -> SQLite).
+* Sincronização de estado para atualização em tempo real das tabelas visuais após transações no banco.

@@ -1,0 +1,37 @@
+<UserControl x:Class="PetShopCare.Views.TutorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="#F5F6FA">
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Gestao de Tutores" FontSize="24" FontWeight="Bold" Foreground="#2C3E50"/>
+                <TextBlock Text="Gerencie os clientes e proprietarios de pets do sistema." FontSize="14" Foreground="#7F8C8D" Margin="0,5,0,0"/>
+            </StackPanel>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Center" Background="#1ABC9C" BorderThickness="0" Padding="10,00">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Plus" Width="20" Height="20" Margin="0,0,8,0" Foreground="White"/>
+                    <TextBlock Text="NOVO TUTOR" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <Border Grid.Row="1" Background="White" CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Padding="15">
+            <DataGrid ItemsSource="{Binding Tutores}" AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" BorderThickness="0"
+                      HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E0E0E0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Nome Completo" Width="*" Binding="{Binding Nome}"/>
+                    <DataGridTextColumn Header="CPF" Width="150" Binding="{Binding CPF}"/>
+                    <DataGridTextColumn Header="Telefone" Width="150" Binding="{Binding Telefone}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>
