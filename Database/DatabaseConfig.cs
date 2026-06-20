@@ -26,7 +26,23 @@ namespace PetShopCare.Database
                         CPF TEXT UNIQUE NOT NULL,
                         Endereco TEXT,
                         Telefone TEXT,
-                        Email TEXT,
+                        Email TEXT
+                    );";
+
+                string sqlPets = @"
+                    CREATE TABLE IF NOT EXISTS Pets (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        ClienteId INTEGER NOT NULL,
+                        Nome TEXT NOT NULL,
+                        Especie TEXT,
+                        Raca TEXT,
+                        Sexo TEXT,
+                        DataNascimento TEXT,
+                        Peso REAL,
+                        Cor TEXT,
+                        Observacoes TEXT,
+                        FotoPath TEXT,
+                        FOREIGN KEY (ClienteId) REFERENCES Clientes(Id) ON DELETE CASCADE
                     );";
 
                 using (var command = new SqliteCommand(createTableQuery, connection))

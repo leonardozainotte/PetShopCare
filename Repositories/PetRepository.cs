@@ -65,5 +65,12 @@ namespace PetShopCare.Repositories {
 
             conexao.Execute(sql, new { Id = id });
         }
+
+        public void ExcluirPorClienteId(int clienteId){
+            using var conexao = ObterConexao();
+            string sql = "DELETE FROM Pets WHERE ClienteId = @ClienteId";
+
+            conexao.Execute(sql, new { ClienteId = clienteId });
+        }
     }
 }

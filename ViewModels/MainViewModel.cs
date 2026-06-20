@@ -1,27 +1,37 @@
 using System.Windows.Input;
 
-namespace PetShopCare.ViewModels {
-    public class MainViewModel : ViewModelBase {
+namespace PetShopCare.ViewModels
+{
+    public class MainViewModel : ViewModelBase
+    {
         private object _telaAtual;
 
-        // Propriedade que o ContentControl do XAML monitora para redesenhar a tela central
-        public object TelaAtual {
-            get { return _telaAtual; }
-            set {
+        public object TelaAtual
+        {
+            get => _telaAtual;
+            set
+            {
                 _telaAtual = value;
-                OnPropertyChanged(); // Dispara o aviso de atualização para a View
+                OnPropertyChanged();
             }
         }
 
-        // Comando que será amarrado ao botão "Tutores" da barra lateral
+        // 1. Declaração de todas as rotas possíveis
+        public ICommand AbrirDashboardCommand { get; }
         public ICommand AbrirTutoresCommand { get; }
+        public ICommand AbrirProntuariosCommand { get; }
+        public ICommand AbrirPdvCommand { get; }
 
-        public MainViewModel() {
-            // Mensagem de boas-vindas padrão ao iniciar o sistema
-            TelaAtual = "Bem-vindo ao PetShopCare! Selecione um menu na barra lateral.";
+        public MainViewModel()
+        {
+            // 2. Mapeamento das ações (O que cada botão faz)
+            AbrirDashboardCommand = new RelayCommand(p => TelaAtual = "Resumo Geral do PetShop");
+            AbrirTutoresCommand = new RelayCommand(p => TelaAtual = new TutorViewModel());
+            AbrirProntuariosCommand = new RelayCommand(p => TelaAtual = "Módulo de Prontuários (Em Desenvolvimento...)");
+            AbrirPdvCommand = new RelayCommand(p => TelaAtual = "Ponto de Venda (Em Desenvolvimento...)");
 
-            // Instancia o comando de navegação, injetando a TutorViewModel na área de trabalho
-            AbrirTutoresCommand = new RelayCommand(o => TelaAtual = new TutorViewModel());
+            // 3. Define a tela inicial obrigatória
+            TelaAtual = "Resumo Geral do PetShop";
         }
     }
 }

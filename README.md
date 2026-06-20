@@ -6,6 +6,7 @@ Sistema desktop de gestão integrada para Pet Shops, focado no controle de clien
 
 * **Plataforma:** .NET 8.0 (Desktop)
 * **Interface:** WPF (Windows Presentation Foundation)
+* **Biblioteca de UI:** Material Design In XAML Toolkit
 * **Linguagem:** C#
 * **Padrão Arquitetural:** MVVM (Model-View-ViewModel)
 * **Banco de Dados:** SQLite (Embutido / Local)
@@ -18,13 +19,13 @@ Sistema desktop de gestão integrada para Pet Shops, focado no controle de clien
 
 ### ✅ Etapa 1: Engenharia de Dados e Modelagem
 A base de dados foi projetada com foco em integridade referencial e normalização (1:N entre Clientes e Pets).
-* Tabelas criadas: `Usuarios`, `Clientes`, `Pets`, `Produtos`, `EstoqueMovimentacao`, `Vendas`, `ItensVenda`, `Servicos` e `OrdensServico`.
-* Motor SQLite configurado com `INTEGER PRIMARY KEY AUTOINCREMENT` para rastreabilidade fiscal contínua.
+* Tabelas projetadas: `Usuarios`, `Clientes`, `Pets`, `Produtos`, `EstoqueMovimentacao`, `Vendas`, `ItensVenda`, `Servicos` e `OrdensServico`.
+* Motor SQLite configurado com `INTEGER PRIMARY KEY AUTOINCREMENT` para rastreabilidade contínua.
 
 ### ✅ Etapa 2: Setup de Infraestrutura
 * Criação da solução (`.sln`) e estruturação de diretórios no padrão MVVM (`Models`, `Views`, `ViewModels`, `Repositories`, `Services`, `Database`).
 * Isolamento do arquivo `PetShopCare.db` com diretiva de build para preservação de dados durante o modo de depuração.
-* Instalação das dependências NuGet (`Dapper` e provedor SQLite).
+* Instalação das dependências NuGet (`Dapper`, `Microsoft.Data.Sqlite` e `MaterialDesignThemes`).
 
 ### ✅ Etapa 3: Mapeamento Objeto-Relacional (Models)
 * Implementação do modelo de domínio anêmico refletindo as tabelas do banco.
@@ -47,10 +48,18 @@ Implementação da barreira sanitária do domínio. Nenhuma informação atinge 
 Transição para a camada de apresentação rejeitando o uso de *Code-Behind* para lógica de negócios, adotando estritamente o *Data Binding*.
 * **Infraestrutura UI:** Implementação do `ViewModelBase` (`INotifyPropertyChanged`) para reatividade assíncrona da tela e `RelayCommand` (`ICommand`) para o roteamento isolado de eventos de clique.
 * **Navegação Dinâmica:** Estruturação do `MainView` atuando como contêiner principal (`ContentControl`), injetando *UserControls* (como `TutorView`) dinamicamente via comandos, sem acoplamento de múltiplas janelas.
-* **Estabilização de Compilação:** Supressão estratégica de avisos de nulidade global (C# 8.0+) e resolução de conflitos de tipos, garantindo um ambiente de compilação limpo (zero erros ou *warnings*).
+* **Estabilização de Compilação:** Supressão de avisos de nulidade global (C# 8.0+) e resolução de conflitos de tipos, garantindo um ambiente de compilação limpo (zero erros ou *warnings*).
 * **Conexão UI-Banco:** Integração do fluxo de leitura do SQLite (via Dapper) com a `DataGrid` da interface.
 
-### 🚧 Etapa 7: Operações CRUD na Interface (Em Andamento)
-* Modelagem dos formulários de entrada de dados para inserção e atualização.
-* Implementação do fluxo completo de gravação (View -> ViewModel -> Service -> Repository -> SQLite).
-* Sincronização de estado para atualização em tempo real das tabelas visuais após transações no banco.
+### ✅ Etapa 7: CRUD de Tutores e Arquitetura Desacoplada
+Implementação completa do fluxo de gerenciamento de clientes/tutores aplicando boas práticas de UX e o Princípio da Responsabilidade Única (SRP).
+* **Desacoplamento de Visões (SRP):** Divisão estrita do fluxo em duas janelas independentes: `CadastroTutorView` (exclusiva para inserções lógicas limpas) e `EdicaoTutorView` (focada em atualizações e exclusões), permitindo evolução independente de layouts.
+* **Validação em Tempo Real:** Sincronização do estado de comandos via `CanExecute` (`PodeSalvar` e `PodeAlterar`), bloqueando os botões de ação na interface até que os campos prioritários obrigatórios (*Nome*, *CPF* e *Telefone*) estejam preenchidos.
+* **Máscaras de Entrada:** Implementação de rotinas de formatação dinâmica diretamente no comportamento do input (Code-Behind visual) para os padrões de CPF (`000.000.000-00`) e Telefone (`(00) 00000-0000`).
+* ** Engenharia de Resiliência:** * Automação de Infraestrutura: Inicialização forçada do esquema de tabelas (`CREATE TABLE IF NOT EXISTS`) no ciclo de vida global de inicialização da aplicação (`App.xaml.cs`).
+    * Tratamento de Exclusão em Cascata: Implementação de proteção defensiva (*try-catch shield*) no `ClienteService` para interceptar e mitigar exceções estruturais em cenários onde tabelas relacionais dependentes (ex: `Pets`) estão vazias ou ausentes, mantendo a operação principal funcional e sem travamentos.
+
+### 🚧 Etapa 8: Módulo de Gestão de Pets (Próximo Passo)
+* Modelagem e criação da interface visual para gerenciamento de animais vinculados.
+* Implementação de `ComboBox` reativa para mapeamento e seleção do Tutor responsável (Chave Estrangeira 1:N).
+* Integração das rotinas de persistência e deleção vinculadas ao `PetRepository`.

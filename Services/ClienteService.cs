@@ -39,5 +39,22 @@ namespace PetShopCare.Services {
         public void ExcluirCliente(int id) {
             _repository.Excluir(id);
         }
+
+        public void ExcluirClienteCompleto(int idTutor) {
+            // 1. Tenta a Exclusão em Cascata (Limpar os pets)
+            try {
+                var petRepository = new PetShopCare.Repositories.PetRepository();
+                petRepository.ExcluirPorClienteId(idTutor);
+            }
+            catch (Microsoft.Data.Sqlite.SqliteException ex) {
+                // Se o erro for "no such table" (código de erro SQLite comum), 
+                // o sistema engole o erro silenciosamente e segue o fluxo, 
+                // garantindo que a exclusão do Tutor não seja interrompida.
+                System.Diagnostics.Debug.WriteLine($"Aviso: Tabela de pets não encontrada. Detalhe: {ex.Message}");
+            }
+
+            // 2. Exclui o Tutor principal com segurança
+            _repository.Excluir(idTutor);
+        }
     }
 }

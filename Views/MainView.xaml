@@ -25,6 +25,34 @@
 		<DataTemplate DataType="{x:Type viewmodels:TutorViewModel}">
 			<views:TutorView />
 		</DataTemplate>
+
+		<Style x:Key="MenuButtonStyle" TargetType="RadioButton">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="Height" Value="50"/>
+			<Setter Property="Margin" Value="10,5"/>
+			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="RadioButton">
+						<Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+							<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="Center"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsChecked" Value="True">
+								<Setter Property="Background" Value="#E0E0E0"/>
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter Property="Background" Value="#F5F5F5"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 	</Window.Resources>
 
 	<Grid>
@@ -37,7 +65,7 @@
 			<StackPanel>
 				<TextBlock Text="PetShop Care" FontSize="26" FontWeight="ExtraBold" Foreground="{StaticResource ColorPrimary}" HorizontalAlignment="Center" Margin="0,30,0,40"/>
 
-				<Button Background="Transparent" BorderBrush="Transparent" Padding="0" Height="50" Margin="10,5" HorizontalContentAlignment="Stretch">
+				<RadioButton GroupName="MenuLateral" IsChecked="True" Command="{Binding AbrirDashboardCommand}" Style="{StaticResource MenuButtonStyle}">
 					<Grid Margin="20,0,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -46,9 +74,9 @@
 						<materialDesign:PackIcon Grid.Column="0" Kind="ViewDashboardOutline" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="1" Text="Dashboard" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
 					</Grid>
-				</Button>
+				</RadioButton>
 
-				<Button Command="{Binding AbrirTutoresCommand}" Background="Transparent" BorderBrush="Transparent" Padding="0" Height="50" Margin="10,5" HorizontalContentAlignment="Stretch">
+				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirTutoresCommand}" Style="{StaticResource MenuButtonStyle}">
 					<Grid Margin="20,0,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -57,9 +85,9 @@
 						<materialDesign:PackIcon Grid.Column="0" Kind="AccountMultipleOutline" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="1" Text="Tutores" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
 					</Grid>
-				</Button>
+				</RadioButton>
 
-				<Button Background="Transparent" BorderBrush="Transparent" Padding="0" Height="50" Margin="10,5" HorizontalContentAlignment="Stretch">
+				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirProntuariosCommand}" Style="{StaticResource MenuButtonStyle}">
 					<Grid Margin="20,0,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -68,9 +96,9 @@
 						<materialDesign:PackIcon Grid.Column="0" Kind="Dog" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="1" Text="Prontuarios Pets" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
 					</Grid>
-				</Button>
+				</RadioButton>
 
-				<Button Background="Transparent" BorderBrush="Transparent" Padding="0" Height="50" Margin="10,5" HorizontalContentAlignment="Stretch">
+				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirPdvCommand}" Style="{StaticResource MenuButtonStyle}">
 					<Grid Margin="20,0,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -79,7 +107,7 @@
 						<materialDesign:PackIcon Grid.Column="0" Kind="CartOutline" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="1" Text="Ponto de Venda" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
 					</Grid>
-				</Button>
+				</RadioButton>
 			</StackPanel>
 		</Border>
 
