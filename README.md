@@ -57,8 +57,8 @@ Implementação completa do fluxo de gerenciamento de clientes/tutores aplicando
 * **Validação em Tempo Real:** Sincronização do estado de comandos via `CanExecute` (`PodeSalvar` e `PodeAlterar`), bloqueando os botões de ação na interface até que os campos prioritários obrigatórios (*Nome*, *CPF* e *Telefone*) estejam preenchidos.
 * **Máscaras de Entrada:** Implementação de rotinas de formatação dinâmica diretamente no comportamento do input (Code-Behind visual) para os padrões de CPF (`000.000.000-00`) e Telefone (`(00) 00000-0000`).
 * **Engenharia de Resiliência:** 
-* **Automação de Infraestrutura:** Inicialização forçada do esquema de tabelas (`CREATE TABLE IF NOT EXISTS`) no ciclo de vida global de inicialização da aplicação (`App.xaml.cs`).
-* **Tratamento de Exclusão em Cascata:** Implementação de proteção defensiva (*try-catch shield*) no `ClienteService` para interceptar e mitigar exceções estruturais em cenários onde tabelas relacionais dependentes (ex: `Pets`) estão vazias ou ausentes, mantendo a operação principal funcional e sem travamentos.
+    * Automação de Infraestrutura: Inicialização forçada do esquema de tabelas (`CREATE TABLE IF NOT EXISTS`) no ciclo de vida global de inicialização da aplicação (`App.xaml.cs`).
+    * Tratamento de Exclusão em Cascata: Implementação de proteção defensiva (*try-catch shield*) no `ClienteService` para interceptar e mitigar exceções estruturais em cenários onde tabelas relacionais dependentes (ex: `Pets`) estão vazias ou ausentes, mantendo a operação principal funcional e sem travamentos.
 
 ### 🚧 Etapa 8: Módulo de Gestão de Pets (Próximo Passo)
 * Modelagem e criação da interface visual para gerenciamento de animais vinculados.
