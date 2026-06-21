@@ -12,6 +12,5 @@ namespace PetShopCare.Models {
         public decimal? Peso { get; set; }
         public string Cor { get; set; }
         public string Observacoes { get; set; }
-        public string FotoPath { get; set; }
     }
 }

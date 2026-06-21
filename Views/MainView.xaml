@@ -8,7 +8,8 @@
         xmlns:viewmodels="clr-namespace:PetShopCare.ViewModels"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="PetShopCare - Dashboard" Height="720" Width="1280"
+        Title="PetShopCare" Height="720" Width="1280"
+		Icon="pack://application:,,,/Images/logo.png"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Background="{StaticResource ColorBackground}">
@@ -22,8 +23,12 @@
 			<TextBlock Text="{Binding}" FontSize="24" FontWeight="Medium" Foreground="{StaticResource ColorTextSecondary}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
 		</DataTemplate>
+		
 		<DataTemplate DataType="{x:Type viewmodels:TutorViewModel}">
 			<views:TutorView />
+		</DataTemplate>
+		<DataTemplate DataType="{x:Type viewmodels:PetViewModel}">
+			<views:PetView />
 		</DataTemplate>
 
 		<Style x:Key="MenuButtonStyle" TargetType="RadioButton">
@@ -63,8 +68,13 @@
 
 		<Border Grid.Column="0" Background="{StaticResource ColorSurface}" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
 			<StackPanel>
+				<Image Source="pack://application:,,,/Images/logo.png"
+					   Height="80" Width="100"
+					   Margin="0,30,0,0"
+					   RenderOptions.BitmapScalingMode="HighQuality"/>
+				
 				<TextBlock Text="PetShop Care" FontSize="26" FontWeight="ExtraBold" Foreground="{StaticResource ColorPrimary}" HorizontalAlignment="Center" Margin="0,30,0,40"/>
-
+			
 				<RadioButton GroupName="MenuLateral" IsChecked="True" Command="{Binding AbrirDashboardCommand}" Style="{StaticResource MenuButtonStyle}">
 					<Grid Margin="20,0,0,0">
 						<Grid.ColumnDefinitions>
@@ -94,7 +104,7 @@
 							<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
 						<materialDesign:PackIcon Grid.Column="0" Kind="Dog" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
-						<TextBlock Grid.Column="1" Text="Prontuarios Pets" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
+						<TextBlock Grid.Column="1" Text="Prontuários Pets" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
 					</Grid>
 				</RadioButton>
 
@@ -120,7 +130,7 @@
 				<Grid>
 					<TextBlock Text="Dashboard Geral" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center"/>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-						<TextBlock Text="Ola, Operador" FontSize="14" Foreground="{StaticResource ColorTextSecondary}" VerticalAlignment="Center" Margin="0,0,15,0"/>
+						<TextBlock Text="Olá, Operador" FontSize="14" Foreground="{StaticResource ColorTextSecondary}" VerticalAlignment="Center" Margin="0,0,15,0"/>
 						<Button Width="40" Height="40" Background="#F39C12" BorderThickness="0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
 							<materialDesign:PackIcon Kind="Logout" Foreground="White" Width="20" Height="20"/>
 						</Button>

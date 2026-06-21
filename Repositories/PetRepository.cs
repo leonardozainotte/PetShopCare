@@ -5,24 +5,29 @@ using PetShopCare.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PetShopCare.Repositories {
-    public class PetRepository {
-        private SqliteConnection ObterConexao() {
+namespace PetShopCare.Repositories
+{
+    public class PetRepository
+    {
+        private SqliteConnection ObterConexao()
+        {
             return new SqliteConnection(DatabaseConfig.ConnectionString);
         }
 
         // C - CREATE (Inserir)
-        public void Inserir(Pet pet) {
+        public void Inserir(Pet pet)
+        {
             using var conexao = ObterConexao();
             string sql = @"
-                INSERT INTO Pets (ClienteId, Nome, Especie, Raca, Sexo, DataNascimento, Peso, Cor, Observacoes, FotoPath) 
-                VALUES (@ClienteId, @Nome, @Especie, @Raca, @Sexo, @DataNascimento, @Peso, @Cor, @Observacoes, @FotoPath)";
+                INSERT INTO Pets (ClienteId, Nome, Especie, Raca, Sexo, DataNascimento, Peso, Cor, Observacoes) 
+                VALUES (@ClienteId, @Nome, @Especie, @Raca, @Sexo, @DataNascimento, @Peso, @Cor, @Observacoes)";
 
             conexao.Execute(sql, pet);
         }
 
         // R - READ (Buscar Todos)
-        public List<Pet> BuscarTodos() {
+        public List<Pet> BuscarTodos()
+        {
             using var conexao = ObterConexao();
             string sql = "SELECT * FROM Pets ORDER BY Nome";
 
@@ -30,7 +35,8 @@ namespace PetShopCare.Repositories {
         }
 
         // R - READ (Buscar por ID do Pet)
-        public Pet BuscarPorId(int id) {
+        public Pet BuscarPorId(int id)
+        {
             using var conexao = ObterConexao();
             string sql = "SELECT * FROM Pets WHERE Id = @Id";
 
@@ -38,7 +44,8 @@ namespace PetShopCare.Repositories {
         }
 
         // R - READ ESTRATÉGICO (Buscar todos os Pets de um Tutor específico)
-        public List<Pet> BuscarPorClienteId(int clienteId) {
+        public List<Pet> BuscarPorClienteId(int clienteId)
+        {
             using var conexao = ObterConexao();
             string sql = "SELECT * FROM Pets WHERE ClienteId = @ClienteId ORDER BY Nome";
 
@@ -46,27 +53,31 @@ namespace PetShopCare.Repositories {
         }
 
         // U - UPDATE (Atualizar)
-        public void Atualizar(Pet pet) {
+        public void Atualizar(Pet pet)
+        {
             using var conexao = ObterConexao();
             string sql = @"
                 UPDATE Pets 
                 SET ClienteId = @ClienteId, Nome = @Nome, Especie = @Especie, Raca = @Raca, 
                     Sexo = @Sexo, DataNascimento = @DataNascimento, Peso = @Peso, 
-                    Cor = @Cor, Observacoes = @Observacoes, FotoPath = @FotoPath 
+                    Cor = @Cor, Observacoes = @Observacoes 
                 WHERE Id = @Id";
 
             conexao.Execute(sql, pet);
         }
 
         // D - DELETE (Excluir)
-        public void Excluir(int id) {
+        public void Excluir(int id)
+        {
             using var conexao = ObterConexao();
             string sql = "DELETE FROM Pets WHERE Id = @Id";
 
             conexao.Execute(sql, new { Id = id });
         }
 
-        public void ExcluirPorClienteId(int clienteId){
+        // D - DELETE (Excluir em Cascata)
+        public void ExcluirPorClienteId(int clienteId)
+        {
             using var conexao = ObterConexao();
             string sql = "DELETE FROM Pets WHERE ClienteId = @ClienteId";
 

@@ -1,22 +1,17 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.IO;
 
-namespace PetShopCare.Database
-{
-    public static class DatabaseConfig
-    {
+namespace PetShopCare.Database {
+    public static class DatabaseConfig {
         private static string _databaseFile = "PetShopCare.db";
         public static string ConnectionString => $"Data Source={_databaseFile}";
 
-        public static void InitializeDatabase()
-        {
-            if (!File.Exists(_databaseFile))
-            {
+        public static void InitializeDatabase() {
+            if (!File.Exists(_databaseFile)) {
                 File.Create(_databaseFile).Dispose();
             }
 
-            using (var connection = new SqliteConnection(ConnectionString))
-            {
+            using (var connection = new SqliteConnection(ConnectionString)) {
                 connection.Open();
 
                 string createTableQuery = @"
@@ -41,13 +36,17 @@ namespace PetShopCare.Database
                         Peso REAL,
                         Cor TEXT,
                         Observacoes TEXT,
-                        FotoPath TEXT,
                         FOREIGN KEY (ClienteId) REFERENCES Clientes(Id) ON DELETE CASCADE
                     );";
 
-                using (var command = new SqliteCommand(createTableQuery, connection))
-                {
+                // Executa a criação da tabela Clientes
+                using (var command = new SqliteCommand(createTableQuery, connection)) {
                     command.ExecuteNonQuery();
+                }
+
+                // CORREÇÃO: Executa a criação da tabela Pets
+                using (var commandPets = new SqliteCommand(sqlPets, connection)) {
+                    commandPets.ExecuteNonQuery();
                 }
             }
         }

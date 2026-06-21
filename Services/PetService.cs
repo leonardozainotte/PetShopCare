@@ -29,6 +29,11 @@ namespace PetShopCare.Services {
             return _repository.BuscarPorClienteId(clienteId);
         }
 
+        public List<Pet> ListarTodos()
+        {
+            return _repository.BuscarTodos();
+        }
+
         public void ExcluirPet(int id) {
             _repository.Excluir(id);
         }

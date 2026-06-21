@@ -26,8 +26,13 @@ namespace PetShopCare.ViewModels
         {
             // 2. Mapeamento das ações (O que cada botão faz)
             AbrirDashboardCommand = new RelayCommand(p => TelaAtual = "Resumo Geral do PetShop");
+
+            // Rota de Tutores ativa
             AbrirTutoresCommand = new RelayCommand(p => TelaAtual = new TutorViewModel());
-            AbrirProntuariosCommand = new RelayCommand(p => TelaAtual = "Módulo de Prontuários (Em Desenvolvimento...)");
+
+            // Rota de Pets
+            AbrirProntuariosCommand = new RelayCommand(p => TelaAtual = new PetViewModel());
+
             AbrirPdvCommand = new RelayCommand(p => TelaAtual = "Ponto de Venda (Em Desenvolvimento...)");
 
             // 3. Define a tela inicial obrigatória
