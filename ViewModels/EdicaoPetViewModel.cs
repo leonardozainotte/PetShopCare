@@ -67,6 +67,7 @@ namespace PetShopCare.ViewModels {
                 Sexo = petOriginal.Sexo,
                 DataNascimento = petOriginal.DataNascimento,
                 Peso = petOriginal.Peso,
+                Cor = petOriginal.Cor,
                 Observacoes = petOriginal.Observacoes
             };
 

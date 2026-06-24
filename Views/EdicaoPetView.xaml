@@ -39,26 +39,35 @@
                           IsEditable="True"/>
             </Grid>
 
-            <Grid Margin="0,25,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+			<Grid Margin="0,25,0,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="20"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Column="0" materialDesign:HintAssist.Hint="Sexo" 
+				<ComboBox Grid.Column="0" materialDesign:HintAssist.Hint="Sexo"
                           ItemsSource="{Binding SexosDisponiveis}"
                           SelectedItem="{Binding PetEditado.Sexo, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBox Grid.Column="2" materialDesign:HintAssist.Hint="Peso (kg)" 
+				<TextBox Grid.Column="2" materialDesign:HintAssist.Hint="Peso (kg)"
                          Text="{Binding PesoTexto, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
 
-                <DatePicker Grid.Column="4" materialDesign:HintAssist.Hint="Data de Nascimento"
+			<Grid Margin="0,15,0,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="20"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<DatePicker Grid.Column="0" materialDesign:HintAssist.Hint="Data de Nascimento"
                             SelectedDate="{Binding PetEditado.DataNascimento, UpdateSourceTrigger=PropertyChanged}"
                             Language="pt-BR"/>
-            </Grid>
+
+				<TextBox Grid.Column="2" materialDesign:HintAssist.Hint="Cor / Pelagem"
+                         Text="{Binding PetEditado.Cor, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
 
             <TextBox materialDesign:HintAssist.Hint="Observações Médicas / Comportamentais" 
                      Text="{Binding PetEditado.Observacoes, UpdateSourceTrigger=PropertyChanged}" 

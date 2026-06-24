@@ -38,6 +38,7 @@
 							<Style TargetType="TextBlock">
 								<Setter Property="VerticalAlignment" Value="Center"/>
 								<Setter Property="Margin" Value="10,0,0,0"/>
+								<Setter Property="FontWeight" Value="SemiBold"/>
 							</Style>
 						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>

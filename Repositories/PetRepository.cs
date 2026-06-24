@@ -29,7 +29,11 @@ namespace PetShopCare.Repositories
         public List<Pet> BuscarTodos()
         {
             using var conexao = ObterConexao();
-            string sql = "SELECT * FROM Pets ORDER BY Nome";
+            string sql = @"
+                SELECT p.*, c.Nome AS ClienteNome 
+                FROM Pets p
+                INNER JOIN Clientes c ON p.ClienteId = c.Id
+                ORDER BY p.Nome";
 
             return conexao.Query<Pet>(sql).ToList();
         }

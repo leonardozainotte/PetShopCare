@@ -21,6 +21,7 @@ namespace PetShopCare.ViewModels
         public ICommand AbrirTutoresCommand { get; }
         public ICommand AbrirProntuariosCommand { get; }
         public ICommand AbrirPdvCommand { get; }
+        public ICommand AbrirProdutosCommand { get; }
 
         public MainViewModel()
         {
@@ -33,7 +34,11 @@ namespace PetShopCare.ViewModels
             // Rota de Pets
             AbrirProntuariosCommand = new RelayCommand(p => TelaAtual = new PetViewModel());
 
+            // Rota PDV
             AbrirPdvCommand = new RelayCommand(p => TelaAtual = "Ponto de Venda (Em Desenvolvimento...)");
+
+            // Rota de Produtos Corrigida e Padronizada
+            AbrirProdutosCommand = new RelayCommand(p => TelaAtual = new ProdutoViewModel());
 
             // 3. Define a tela inicial obrigatória
             TelaAtual = "Resumo Geral do PetShop";

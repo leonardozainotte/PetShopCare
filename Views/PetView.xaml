@@ -29,11 +29,12 @@
                       HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E0E0E0">
 				<DataGrid.Columns>
 
-					<DataGridTextColumn Header="Nome" Width="1.5*" Binding="{Binding Nome}">
+					<DataGridTextColumn Header="Nome" Width="1.0*" Binding="{Binding Nome}">
 						<DataGridTextColumn.ElementStyle>
 							<Style TargetType="TextBlock">
 								<Setter Property="VerticalAlignment" Value="Center"/>
 								<Setter Property="Margin" Value="10,0,0,0"/>
+								<Setter Property="FontWeight" Value="SemiBold"/>
 							</Style>
 						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>
@@ -47,7 +48,7 @@
 						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>
 
-					<DataGridTextColumn Header="Raça" Width="1.5*" Binding="{Binding Raca}">
+					<DataGridTextColumn Header="Raça" Width="1.1*" Binding="{Binding Raca}">
 						<DataGridTextColumn.ElementStyle>
 							<Style TargetType="TextBlock">
 								<Setter Property="VerticalAlignment" Value="Center"/>
@@ -56,7 +57,7 @@
 						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>
 
-					<DataGridTextColumn Header="Sexo" Width="*" Binding="{Binding Sexo}">
+					<DataGridTextColumn Header="Sexo" Width="0.8*" Binding="{Binding Sexo}">
 						<DataGridTextColumn.ElementStyle>
 							<Style TargetType="TextBlock">
 								<Setter Property="VerticalAlignment" Value="Center"/>
@@ -65,7 +66,7 @@
 						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>
 
-					<DataGridTextColumn Header="Data Nasc." Width="*" Binding="{Binding DataNascimento, StringFormat='{}{0:dd/MM/yyyy}'}">
+					<DataGridTextColumn Header="Data Nasc." Width="1.2*" Binding="{Binding DataNascimento, StringFormat='{}{0:dd/MM/yyyy}'}">
 						<DataGridTextColumn.ElementStyle>
 							<Style TargetType="TextBlock">
 								<Setter Property="VerticalAlignment" Value="Center"/>
@@ -74,11 +75,30 @@
 						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>
 
-					<DataGridTextColumn Header="Peso (kg)" Width="*" Binding="{Binding Peso}">
+					<DataGridTextColumn Header="Peso (kg)" Width="1.2*" Binding="{Binding Peso}">
 						<DataGridTextColumn.ElementStyle>
 							<Style TargetType="TextBlock">
 								<Setter Property="VerticalAlignment" Value="Center"/>
 								<Setter Property="HorizontalAlignment" Value="Center"/>
+							</Style>
+						</DataGridTextColumn.ElementStyle>
+					</DataGridTextColumn>
+
+					<DataGridTextColumn Header="Cor" Width="*" Binding="{Binding Cor}">
+						<DataGridTextColumn.ElementStyle>
+							<Style TargetType="TextBlock">
+								<Setter Property="VerticalAlignment" Value="Center"/>
+								<Setter Property="Margin" Value="10,0,0,0"/>
+							</Style>
+						</DataGridTextColumn.ElementStyle>
+					</DataGridTextColumn>
+
+					<DataGridTextColumn Header="Tutor / Dono" Width="2*" Binding="{Binding ClienteNome}">
+						<DataGridTextColumn.ElementStyle>
+							<Style TargetType="TextBlock">
+								<Setter Property="VerticalAlignment" Value="Center"/>
+								<Setter Property="Margin" Value="10,0,0,0"/>
+								<Setter Property="FontWeight" Value="SemiBold"/>
 							</Style>
 						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>

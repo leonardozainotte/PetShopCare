@@ -31,6 +31,10 @@
 			<views:PetView />
 		</DataTemplate>
 
+		<DataTemplate DataType="{x:Type viewmodels:ProdutoViewModel}">
+			<views:ProdutoView/>
+		</DataTemplate>
+
 		<Style x:Key="MenuButtonStyle" TargetType="RadioButton">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="BorderBrush" Value="Transparent"/>
@@ -116,6 +120,17 @@
 						</Grid.ColumnDefinitions>
 						<materialDesign:PackIcon Grid.Column="0" Kind="CartOutline" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="1" Text="Ponto de Venda" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
+					</Grid>
+				</RadioButton>
+
+				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirProdutosCommand}" Style="{StaticResource MenuButtonStyle}">
+					<Grid Margin="20,0,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<materialDesign:PackIcon Grid.Column="0" Kind="PackageVariantClosed" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="1" Text="Catálogo / Estoque" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
 					</Grid>
 				</RadioButton>
 			</StackPanel>

@@ -123,6 +123,8 @@ namespace PetShopCare.ViewModels {
 
             // Limpa o campo da raça do modelo para evitar inconsistências (ex: selecionar Cão e a raça continuar Siamês)
             if (NovoPet != null) NovoPet.Raca = string.Empty;
+
+            if (NovoPet != null) NovoPet.Cor = string.Empty;
         }
 
         private bool PodeSalvar(object? parameter) {
