@@ -4,28 +4,43 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Background="#F5F6FA">
 
-    <Grid Margin="30">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+	<Grid Margin="30">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="0,0,0,20">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Gestão de Pets" FontSize="24" FontWeight="Bold" Foreground="#2C3E50"/>
-                <TextBlock Text="Gerencie os animais e seus respectivos prontuários médicos." FontSize="14" Foreground="#7F8C8D" Margin="0,5,0,0"/>
-            </StackPanel>
+		<Grid Grid.Row="0" Margin="0,0,0,20">
+			<StackPanel Orientation="Vertical">
+				<TextBlock Text="Gestão de Pets" FontSize="24" FontWeight="Bold" Foreground="#2C3E50"/>
+				<TextBlock Text="Gerencie os animais e seus respectivos prontuários médicos." FontSize="14" Foreground="#7F8C8D" Margin="0,5,0,0"/>
+			</StackPanel>
 
-            <Button Command="{Binding AbrirCadastroCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Background="#1ABC9C" BorderThickness="0" Padding="10,0">
-                <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Plus" Width="20" Height="20" Margin="0,0,8,0" Foreground="White"/>
-                    <TextBlock Text="NOVO PET" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-        </Grid>
+			<Button Command="{Binding AbrirCadastroCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Background="#1ABC9C" BorderThickness="0" Padding="10,0">
+				<StackPanel Orientation="Horizontal">
+					<materialDesign:PackIcon Kind="Plus" Width="20" Height="20" Margin="0,0,8,0" Foreground="White"/>
+					<TextBlock Text="NOVO PET" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+		</Grid>
 
-        <Border Grid.Row="1" Background="White" CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Padding="15">
-            <DataGrid ItemsSource="{Binding Pets}" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" BorderThickness="0"
+		<Grid Grid.Row="1" Margin="0,0,0,15">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="450"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<TextBox Grid.Column="0"
+                     materialDesign:HintAssist.Hint="Pesquisar por nome do pet ou tutor..."
+                     materialDesign:TextFieldAssist.HasClearButton="True"
+                     Text="{Binding TextoPesquisa, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     FontSize="14"/>
+		</Grid>
+
+		<Border Grid.Row="2" Background="White" CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Padding="15">
+			<DataGrid ItemsSource="{Binding Pets}" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" BorderThickness="0"
                       HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E0E0E0">
 				<DataGrid.Columns>
 
@@ -128,7 +143,7 @@
 					</DataGridTemplateColumn>
 
 				</DataGrid.Columns>
-            </DataGrid>
-        </Border>
-    </Grid>
+			</DataGrid>
+		</Border>
+	</Grid>
 </UserControl>

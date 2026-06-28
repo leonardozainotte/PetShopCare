@@ -1,0 +1,189 @@
+﻿<UserControl x:Class="PetShopCare.Views.PDVView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="#F5F6FA">
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Margin="0,0,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                <TextBlock Text="Ponto de Venda (PDV)" FontSize="26" FontWeight="Bold" Foreground="#2C3E50"/>
+                <TextBlock Text="Realize vendas rápidas e movimente o estoque automaticamente." FontSize="14" Foreground="#7F8C8D" Margin="0,5,0,15"/>
+
+                <ComboBox materialDesign:HintAssist.Hint="Selecionar Cliente (Opcional)" 
+                          ItemsSource="{Binding ClientesDisponiveis}" 
+                          SelectedItem="{Binding ClienteSelecionado}"
+                          DisplayMemberPath="Nome"
+                          IsEditable="True" 
+                          materialDesign:TextFieldAssist.HasClearButton="True"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontSize="15"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Margin="0,0,0,15">
+                <TextBox materialDesign:HintAssist.Hint="Buscar Produto (Nome ou Código de Barras)..." 
+                         materialDesign:TextFieldAssist.HasClearButton="True"
+                         Text="{Binding TextoPesquisaProduto, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         FontSize="16" FontWeight="SemiBold"/>
+            </Grid>
+
+            <Border Grid.Row="2" Background="White" CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Padding="10">
+                <DataGrid ItemsSource="{Binding ProdutosFiltrados}" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" BorderThickness="0"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E0E0E0" RowHeight="45">
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Código" Width="1*" Binding="{Binding CodigoBarras}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="5,0,0,0"/>
+                                    <Setter Property="Foreground" Value="#7F8C8D"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="Produto" Width="3*" Binding="{Binding Nome}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="Preço" Width="1.2*" Binding="{Binding PrecoVenda, StringFormat='{}{0:C}'}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    <Setter Property="Margin" Value="0,0,10,0"/>
+                                    <Setter Property="Foreground" Value="#27AE60"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="Est." Width="0.8*" Binding="{Binding EstoqueAtual}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Width="70">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding DataContext.AdicionarItemCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                                            Background="#3498DB" BorderThickness="0" Width="25" Height="25" ToolTip="Adicionar ao Carrinho">
+                                        <materialDesign:PackIcon Kind="Plus" Foreground="White" Width="20" Height="20"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+
+        <Border Grid.Column="1" Background="White" CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Padding="15">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                    <materialDesign:PackIcon Kind="CartOutline" Width="28" Height="28" Foreground="#2C3E50" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Text="Carrinho" FontSize="22" FontWeight="Bold" Foreground="#2C3E50" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <DataGrid Grid.Row="1" ItemsSource="{Binding Carrinho}" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" BorderThickness="0"
+          HeadersVisibility="None" GridLinesVisibility="None" RowHeight="50" Margin="0,0,0,15">
+                    <DataGrid.Columns>
+
+                        <DataGridTemplateColumn Width="2*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding ProdutoNome}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Quantidade, StringFormat='{}Qtd: {0}'}" Foreground="#7F8C8D" FontSize="12"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Width="1*" Binding="{Binding Subtotal, StringFormat='{}{0:C}'}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="#2C3E50"/>
+                                    <Setter Property="Margin" Value="0,0,10,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Width="110">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                        <Button Command="{Binding DataContext.DiminuirQuantidadeCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignToolButton}"
+                                                Width="30" Height="30" Padding="0" Margin="0,0,5,0" ToolTip="Diminuir Quantidade">
+                                            <materialDesign:PackIcon Kind="Minus" Foreground="#7F8C8D" Width="18" Height="18"/>
+                                        </Button>
+
+                                        <Button Command="{Binding DataContext.RemoverItemCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignToolButton}"
+                                                Width="30" Height="30" Padding="0" ToolTip="Remover do Carrinho">
+                                            <materialDesign:PackIcon Kind="TrashCanOutline" Foreground="#E74C3C" Width="18" Height="18"/>
+                                        </Button>
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel Grid.Row="2">
+                    <Border Background="#F5F6FA" CornerRadius="6" Padding="15" Margin="0,0,0,15">
+                        <Grid>
+                            <TextBlock Text="Total da Venda:" FontSize="16" Foreground="#7F8C8D" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding TotalVenda, StringFormat='{}{0:C}'}" FontSize="28" FontWeight="Bold" Foreground="#27AE60" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Border>
+
+                    <Button Content="FINALIZAR VENDA" Command="{Binding FinalizarVendaCommand}" 
+                            Style="{StaticResource MaterialDesignRaisedButton}" 
+                            Background="#27AE60" BorderBrush="#27AE60" Foreground="White" 
+                            Height="55" FontSize="18" FontWeight="Bold"
+                            materialDesign:ButtonAssist.CornerRadius="6"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

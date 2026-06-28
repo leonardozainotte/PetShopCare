@@ -1,30 +1,52 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using PetShopCare.Models;
 using PetShopCare.Services;
 using PetShopCare.Views;
 
-namespace PetShopCare.ViewModels {
-    public class PetViewModel : ViewModelBase {
+namespace PetShopCare.ViewModels
+{
+    public class PetViewModel : ViewModelBase
+    {
         private readonly PetService _petService;
-        private ObservableCollection<Pet> _pets;
 
-        // A lista que a DataGrid vai observar
-        public ObservableCollection<Pet> Pets {
+        // A lista exibida na DataGrid
+        private ObservableCollection<Pet> _pets;
+        public ObservableCollection<Pet> Pets
+        {
             get => _pets;
-            set {
+            set
+            {
                 _pets = value;
                 OnPropertyChanged();
             }
         }
 
-        // Comandos para os botões de ação
+        // 1. Propriedade da barra de pesquisa
+        private string _textoPesquisa = string.Empty;
+        public string TextoPesquisa
+        {
+            get => _textoPesquisa;
+            set
+            {
+                _textoPesquisa = value;
+                OnPropertyChanged();
+                AplicarFiltro(); // Filtra a tabela a cada caractere digitado
+            }
+        }
+
+        // 2. Backup da lista completa (evita ir ao banco de dados repetidas vezes)
+        private List<Pet> _listaCompletaPets = new List<Pet>();
+
         public ICommand AbrirCadastroCommand { get; }
         public ICommand AbrirEdicaoCommand { get; }
 
-        public PetViewModel() {
+        public PetViewModel()
+        {
             _petService = new PetService();
             Pets = new ObservableCollection<Pet>();
 
@@ -34,48 +56,71 @@ namespace PetShopCare.ViewModels {
             CarregarPets();
         }
 
-        private void CarregarPets() {
-            try {
+        private void CarregarPets()
+        {
+            try
+            {
                 var dados = _petService.ListarTodos();
-                if (dados != null) {
-                    Pets = new ObservableCollection<Pet>(dados);
+                if (dados != null)
+                {
+                    _listaCompletaPets = dados; // Atualiza o backup
+                    AplicarFiltro(); // Aplica o filtro antes de mostrar na tela
                 }
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 // Em um cenário real, poderíamos logar este erro
             }
         }
 
-        private void ExecutarAbrirCadastro(object parameter) {
-            // 1. Prepara o cérebro da janela de cadastro
-            var viewModel = new CadastroPetViewModel();
+        // 3. O Cérebro da Filtragem (LINQ)
+        private void AplicarFiltro()
+        {
+            // Se a barra estiver vazia, exibe todos os pets
+            if (string.IsNullOrWhiteSpace(TextoPesquisa))
+            {
+                Pets = new ObservableCollection<Pet>(_listaCompletaPets);
+                return;
+            }
 
-            // 2. Prepara a janela visual e injeta o cérebro nela
-            var janela = new CadastroPetView {
+            var textoDigitado = TextoPesquisa.ToLower();
+
+            // Busca inteligente: avalia nome do pet ou nome do dono
+            var filtrados = _listaCompletaPets.Where(p =>
+                (p.Nome != null && p.Nome.ToLower().Contains(textoDigitado)) ||
+                (p.ClienteNome != null && p.ClienteNome.ToLower().Contains(textoDigitado))
+            ).ToList();
+
+            Pets = new ObservableCollection<Pet>(filtrados);
+        }
+
+        private void ExecutarAbrirCadastro(object parameter)
+        {
+            var viewModel = new CadastroPetViewModel();
+            var janela = new CadastroPetView
+            {
                 DataContext = viewModel
             };
 
-            // 3. Ensina o ViewModel como fechar esta janela específica
             viewModel.FecharJanela = () => janela.Close();
-
-            // 4. Abre a janela e bloqueia a tela de trás (Modal)
             janela.ShowDialog();
 
-            // 5. GATILHO DE SINCRONIZAÇÃO: Assim que a janela fechar, a tabela atualiza!
             CarregarPets();
         }
 
-        private void ExecutarAbrirEdicao(object parameter) {
-            if (parameter is Pet petSelecionado) {
+        private void ExecutarAbrirEdicao(object parameter)
+        {
+            if (parameter is Pet petSelecionado)
+            {
                 var viewModel = new EdicaoPetViewModel(petSelecionado);
-                var janela = new EdicaoPetView {
+                var janela = new EdicaoPetView
+                {
                     DataContext = viewModel
                 };
 
                 viewModel.FecharJanela = () => janela.Close();
                 janela.ShowDialog();
 
-                // Recarrega os dados do banco após a janela de edição ser fechada
                 CarregarPets();
             }
         }

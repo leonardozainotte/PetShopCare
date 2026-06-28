@@ -68,11 +68,8 @@ Implementação completa do fluxo de gerenciamento de clientes/tutores aplicando
 * **Desacoplamento de Visões (SRP):** Divisão estrita do fluxo em duas janelas independentes: `CadastroTutorView` (exclusiva para inserções lógicas limpas) e `EdicaoTutorView` (focada em atualizações e exclusões), permitindo evolução independente de layouts.
 * **Validação em Tempo Real:** Sincronização do estado de comandos via `CanExecute` (`PodeSalvar` e `PodeAlterar`), bloqueando os botões de ação na interface até que os campos prioritários obrigatórios (*Nome*, *CPF* e *Telefone*) estejam preenchidos.
 * **Máscaras de Entrada:** Implementação de rotinas de formatação dinâmica diretamente no comportamento do input (Code-Behind visual) para os padrões de CPF (`000.000.000-00`) e Telefone (`(00) 00000-0000`).
-* **Engenharia de Resiliência:** 
-  - Automação de Infraestrutura: Inicialização forçada do esquema de tabelas (`CREATE TABLE IF NOT EXISTS`) no ciclo de vida global de inicialização da aplicação (`App.xaml.cs`).
+* **Engenharia de Resiliência:** - Automação de Infraestrutura: Inicialização forçada do esquema de tabelas (`CREATE TABLE IF NOT EXISTS`) no ciclo de vida global de inicialização da aplicação (`App.xaml.cs`).
   - Tratamento de Exclusão em Cascata: Implementação de proteção defensiva (*try-catch shield*) no `ClienteService` para interceptar e mitigar exceções estruturais em cenários onde tabelas relacionais dependentes (ex: `Pets`) estão vazias ou ausentes, mantendo a operação principal funcional e sem travamentos.
-
-
 
 ### ✅ Etapa 8: Módulo de Gestão de Pets e Integridade Relacional
 
@@ -93,8 +90,18 @@ Finalização do gerenciamento de produtos com foco estrito em rastreabilidade f
 * **Resolução de *Type Affinity* (Dapper vs. SQLite):** Correção estratégica de quebras de tipagem (`InvalidCastException`) forçando conversões de `Int64` para ponto flutuante em tempo de execução via instrução SQL `CAST(PrecoCusto AS REAL)`.
 * **Segurança Visual e Otimizações de UX:** Evolução da interface global com centralização nativa de janelas de diálogo (`CenterScreen`), exibição via `INNER JOIN` do nome do Tutor na listagem de Prontuários e replicação do padrão de Clonagem de Estado na edição de precificação.
 
-### 🚧 Etapa 10: Ponto de Venda (PDV) (Próximo Passo)
+### ✅ Etapa 10: Ponto de Venda (PDV) e Transações Atômicas
 
-* Construção da interface principal de vendas com carrinho de compras interativo.
-* Integração lógica: seleção de clientes, busca de catálogo e baixa simultânea e atômica do Livro Razão de Estoque.
-* Fechamento financeiro com cálculo de subtotais e validações de regras de negócio em tempo real.
+Construção do núcleo de frente de caixa comercial, com gestão de estado interativa e persistência relacional unificada.
+
+* **Interface de Alta Performance (UX):** Construção de layout particionado (Catálogo vs. Carrinho). Implementação de busca de produtos em tempo real (Key-up Event) filtrada na memória RAM via `LINQ`, sem onerar requisições ao SQLite.
+* **Gestão de Estado do Carrinho:** Lógica de manipulação de itens em memória (Adição, Redução Unitária e Exclusão) com recálculo automático de subtotais e *refresh* visual sem quebra de *Bindings*.
+* **Segurança de Fluxo (`CanExecute`):** Acoplamento do botão de finalização às regras de validação do WPF, mantendo-o nativamente bloqueado caso o estado do carrinho seja vazio.
+* **Transações Atômicas (ACID):** Salvamento robusto utilizando `IDbTransaction` do Dapper. Orquestração da gravação da Venda, vínculo dos Itens, subtração do Estoque Físico e lançamento no Livro Razão num único *Commit*, com *Rollback* de segurança ativado pelo bloco `catch`.
+* **Globalização Sistêmica (`pt-BR`):** Injeção em nível de núcleo (`App.xaml.cs`) da cultura brasileira para formatação monetária (R$) e temporal, unificando as máscaras visuais do XAML de forma definitiva.
+
+### 🚧 Etapa 11: Módulo de Agendamentos e Serviços (Próximo Passo)
+
+* Estruturação de agenda interativa para controle de Banho, Tosa e Consultas Clínicas.
+* Mapeamento relacional de tríade (Cliente -> Pet -> Serviço).
+* Controle de status operacionais (Agendado, Em Andamento, Concluído, Cancelado).

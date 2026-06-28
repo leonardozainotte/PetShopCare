@@ -27,8 +27,13 @@
 		<DataTemplate DataType="{x:Type viewmodels:TutorViewModel}">
 			<views:TutorView />
 		</DataTemplate>
+		
 		<DataTemplate DataType="{x:Type viewmodels:PetViewModel}">
 			<views:PetView />
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type viewmodels:PDVViewModel}">
+			<views:PDVView />
 		</DataTemplate>
 
 		<DataTemplate DataType="{x:Type viewmodels:ProdutoViewModel}">
