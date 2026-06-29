@@ -12,6 +12,7 @@ namespace PetShopCare.ViewModels {
         private readonly ClienteService _clienteService;
         private readonly ProdutoService _produtoService;
         private readonly VendaRepository _vendaRepository;
+        private readonly GeradorReciboService _geradorRecibo;
 
         // 1. Seleção de Cliente
         public ObservableCollection<Cliente> ClientesDisponiveis { get; set; }
@@ -63,6 +64,7 @@ namespace PetShopCare.ViewModels {
             _clienteService = new ClienteService();
             _produtoService = new ProdutoService();
             _vendaRepository = new VendaRepository();
+            _geradorRecibo = new GeradorReciboService();
 
             ClientesDisponiveis = new ObservableCollection<Cliente>();
             ProdutosFiltrados = new ObservableCollection<Produto>();
@@ -164,7 +166,7 @@ namespace PetShopCare.ViewModels {
 
         private void ExecutarFinalizarVenda(object? parameter) {
             try {
-                // 1. Instancia o modelo principal de Venda preenchendo as propriedades necessárias
+                // Instancia o modelo principal de Venda preenchendo as propriedades necessárias
                 var novaVenda = new Venda {
                     DataVenda = DateTime.Now,
                     UsuarioId = 1, // Identificador padrão do operador de caixa
@@ -175,13 +177,16 @@ namespace PetShopCare.ViewModels {
                     Status = "Concluida"
                 };
 
-                // 2. Converte o Carrinho para o formato List esperado pelo repositório
+                // Converte o Carrinho para o formato List esperado pelo repositório
                 var itensVenda = Carrinho.ToList();
 
-                // 3. Executa o processamento atômico do repositório (Vendas -> ItensVenda -> Produtos -> EstoqueMovimentacao)
+                // Executa o processamento atômico do repositório
                 _vendaRepository.ProcessarVenda(novaVenda, itensVenda);
 
-                // 4. Limpeza do estado do caixa e feedback visual de sucesso
+                // GERA E ABRE O COMPROVANTE 
+                _geradorRecibo.GerarEImprimirRecibo(novaVenda, itensVenda, ClienteSelecionado);
+
+                // Limpeza do estado do caixa e feedback visual de sucesso
                 System.Windows.MessageBox.Show("Venda processada com sucesso e estoque atualizado!", "PDV", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
 
                 Carrinho.Clear();
@@ -189,7 +194,7 @@ namespace PetShopCare.ViewModels {
                 TextoPesquisaProduto = string.Empty;
                 RecalcularTotalVenda();
 
-                // 5. Atualiza os dados locais para refletir os novos saldos de estoque no catálogo imediatamente
+                // Atualiza os dados locais para refletir os novos saldos de estoque no catálogo imediatamente
                 CarregarDadosIniciais();
             }
             catch (Exception ex) {

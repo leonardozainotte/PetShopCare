@@ -44,7 +44,6 @@ namespace PetShopCare.Database
                         FOREIGN KEY (ClienteId) REFERENCES Clientes(Id) ON DELETE CASCADE
                     );";
 
-                // --- INÍCIO DA ETAPA 9: PRODUTOS E ESTOQUE ---
                 string sqlProdutos = @"
                     CREATE TABLE IF NOT EXISTS Produtos (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,8 +69,55 @@ namespace PetShopCare.Database
                         UsuarioId INTEGER NOT NULL,
                         FOREIGN KEY(ProdutoId) REFERENCES Produtos(Id)
                     );";
-                // --- FIM DA ETAPA 9 ---
 
+                string sqlServicos = @"
+                    CREATE TABLE IF NOT EXISTS Servicos (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Nome TEXT NOT NULL,
+                        Preco NUMERIC NOT NULL,
+                        TempoEstimadoMinutos INTEGER NOT NULL
+                    );";
+
+                string sqlOrdensServico = @"
+                    CREATE TABLE IF NOT EXISTS OrdensServico (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        ClienteId INTEGER NOT NULL,
+                        PetId INTEGER NOT NULL,
+                        ServicoId INTEGER NOT NULL,
+                        UsuarioResponsavelId INTEGER NOT NULL,
+                        DataHoraAgendamento TEXT NOT NULL,
+                        Valor NUMERIC NOT NULL,
+                        Status TEXT NOT NULL,
+                        Observacoes TEXT,
+                        FOREIGN KEY (PetId) REFERENCES Pets(Id),
+                        FOREIGN KEY (ClienteId) REFERENCES Clientes(Id),
+                        FOREIGN KEY (ServicoId) REFERENCES Servicos(Id)
+                    );";
+
+                string sqlVendas = @"
+                    CREATE TABLE IF NOT EXISTS Vendas (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        ClienteId INTEGER,
+                        UsuarioId INTEGER NOT NULL,
+                        DataVenda TEXT NOT NULL,
+                        ValorTotal NUMERIC NOT NULL,
+                        Desconto NUMERIC DEFAULT 0,
+                        FormaPagamento TEXT,
+                        Status TEXT,
+                        FOREIGN KEY(ClienteId) REFERENCES Clientes(Id)
+                    );";
+
+                string sqlVendaItens = @"
+                    CREATE TABLE IF NOT EXISTS VendaItens (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        VendaId INTEGER NOT NULL,
+                        ProdutoId INTEGER NOT NULL,
+                        Quantidade INTEGER NOT NULL,
+                        PrecoUnitario NUMERIC NOT NULL,
+                        Subtotal NUMERIC NOT NULL,
+                        FOREIGN KEY(VendaId) REFERENCES Vendas(Id) ON DELETE CASCADE,
+                        FOREIGN KEY(ProdutoId) REFERENCES Produtos(Id)
+                    );";
 
                 // Executa a criação da tabela Clientes
                 using (var command = new SqliteCommand(createTableQuery, connection))
@@ -95,6 +141,51 @@ namespace PetShopCare.Database
                 using (var commandMovimentacao = new SqliteCommand(sqlMovimentacao, connection))
                 {
                     commandMovimentacao.ExecuteNonQuery();
+                }
+
+                // Executa a criação da tabela Servicos
+                using (var commandServicos = new SqliteCommand(sqlServicos, connection))
+                {
+                    commandServicos.ExecuteNonQuery();
+                }
+
+                // Executa a criação da tabela OrdensServico
+                using (var commandOrdensServico = new SqliteCommand(sqlOrdensServico, connection))
+                {
+                    commandOrdensServico.ExecuteNonQuery();
+                }
+
+                // Executa a criação da tabela Vendas
+                using (var commandVendas = new SqliteCommand(sqlVendas, connection))
+                {
+                    commandVendas.ExecuteNonQuery();
+                }
+
+                // Executa a criação da tabela VendaItens
+                using (var commandVendaItens = new SqliteCommand(sqlVendaItens, connection))
+                {
+                    commandVendaItens.ExecuteNonQuery();
+                }
+
+                string checkServicos = "SELECT COUNT(*) FROM Servicos";
+                using (var commandCheck = new SqliteCommand(checkServicos, connection))
+                {
+                    long count = (long)commandCheck.ExecuteScalar();
+                    if (count == 0)
+                    {
+                        string seedServicos = @"
+                            INSERT INTO Servicos (Nome, Preco, TempoEstimadoMinutos) VALUES 
+                            ('Banho - Pequeno Porte', 50.00, 30),
+                            ('Banho - Grande Porte', 80.00, 50),
+                            ('Tosa Higiênica', 40.00, 30),
+                            ('Banho e Tosa Completa', 120.00, 90),
+                            ('Consulta Veterinária Clínica', 150.00, 45);";
+
+                        using (var commandSeed = new SqliteCommand(seedServicos, connection))
+                        {
+                            commandSeed.ExecuteNonQuery();
+                        }
+                    }
                 }
             }
         }

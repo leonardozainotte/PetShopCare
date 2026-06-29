@@ -20,29 +20,28 @@ namespace PetShopCare.ViewModels
         public ICommand AbrirDashboardCommand { get; }
         public ICommand AbrirTutoresCommand { get; }
         public ICommand AbrirProntuariosCommand { get; }
-        public ICommand AbrirPdvCommand { get; }
         public ICommand AbrirProdutosCommand { get; }
-        public ICommand AbrirPDVCommand { get; }
+        public ICommand AbrirPdvCommand { get; }
+        public ICommand AbrirAgendamentoCommand { get; }
 
         public MainViewModel()
         {
             // 2. Mapeamento das ações (O que cada botão faz)
-            AbrirDashboardCommand = new RelayCommand(p => TelaAtual = "Resumo Geral do PetShop");
+            AbrirDashboardCommand = new RelayCommand(p => TelaAtual = new DashboardViewModel());
 
-            // Rota de Tutores ativa
+            // Rotas de Cadastros e Catálogo
             AbrirTutoresCommand = new RelayCommand(p => TelaAtual = new TutorViewModel());
-
-            // Rota de Pets
             AbrirProntuariosCommand = new RelayCommand(p => TelaAtual = new PetViewModel());
-
-            // Rota PDV
-            AbrirPdvCommand = new RelayCommand(p => TelaAtual = new PDVViewModel());
-
-            // Rota de Produtos Corrigida e Padronizada
             AbrirProdutosCommand = new RelayCommand(p => TelaAtual = new ProdutoViewModel());
 
+            // Rotas Operacionais
+            AbrirPdvCommand = new RelayCommand(p => TelaAtual = new PDVViewModel());
+
+            // Rota de Agendamento alinhada ao seu padrão!
+            AbrirAgendamentoCommand = new RelayCommand(p => TelaAtual = new AgendamentoViewModel());
+
             // 3. Define a tela inicial obrigatória
-            TelaAtual = "Resumo Geral do PetShop";
+            TelaAtual = new DashboardViewModel();
         }
     }
 }

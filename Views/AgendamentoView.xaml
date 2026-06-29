@@ -1,0 +1,168 @@
+﻿<UserControl x:Class="PetShopCare.Views.AgendamentoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="#F5F6FA">
+
+	<Grid Margin="20">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="4*"/>
+			<ColumnDefinition Width="6*"/>
+		</Grid.ColumnDefinitions>
+
+		<Border Grid.Column="0" Background="White" CornerRadius="8" Padding="20" Margin="0,0,15,0" BorderBrush="#E0E0E0" BorderThickness="1">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+
+				<StackPanel Grid.Row="0" Margin="0,0,0,10">
+					<TextBlock Text="Novo Agendamento" FontSize="22" FontWeight="Bold" Foreground="#2C3E50"/>
+					<TextBlock Text="Selecione o cliente para carregar os pets." FontSize="13" Foreground="#7F8C8D" Margin="0,2,0,0"/>
+				</StackPanel>
+
+				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+					<StackPanel Margin="2,16,2,2">
+
+						<Grid Margin="0,0,0,22">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="1*"/>
+								<ColumnDefinition Width="1*"/>
+							</Grid.ColumnDefinitions>
+
+							<DatePicker Grid.Column="0" materialDesign:HintAssist.Hint="Data" Margin="0,0,10,0"
+                                        SelectedDate="{Binding DataSelecionada}" VerticalAlignment="Bottom"
+                                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" FontSize="15"/>
+
+							<materialDesign:TimePicker Grid.Column="1" materialDesign:HintAssist.Hint="Hora" Margin="10,0,0,0"
+                                                       SelectedTime="{Binding HoraSelecionada}" Is24Hours="True" VerticalAlignment="Bottom"
+                                                       Style="{StaticResource MaterialDesignFloatingHintTimePicker}" FontSize="15"/>
+						</Grid>
+
+						<ComboBox materialDesign:HintAssist.Hint="Tutor / Cliente" Margin="0,0,0,22"
+                                  ItemsSource="{Binding ClientesDisponiveis}" SelectedItem="{Binding ClienteSelecionado}"
+                                  DisplayMemberPath="Nome" IsEditable="True" materialDesign:TextFieldAssist.HasClearButton="True"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontSize="15"/>
+
+						<ComboBox materialDesign:HintAssist.Hint="Pet" Margin="0,0,0,22"
+                                  ItemsSource="{Binding PetsDoCliente}" SelectedItem="{Binding PetSelecionado}"
+                                  DisplayMemberPath="Nome" IsEditable="True"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontSize="15"/>
+
+						<ComboBox materialDesign:HintAssist.Hint="Serviço" Margin="0,0,0,22"
+                                  ItemsSource="{Binding ServicosDisponiveis}" SelectedItem="{Binding ServicoSelecionado}"
+                                  DisplayMemberPath="Nome"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontSize="15"/>
+
+						<TextBox materialDesign:HintAssist.Hint="Valor Cobrado (R$)" Margin="0,0,0,22"
+                                 Text="{Binding ValorAgendamento, StringFormat='{}{0:N2}'}"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontSize="15"/>
+
+						<TextBox materialDesign:HintAssist.Hint="Observações Especiais (Ex: Alergia a shampoo)" 
+                                 Text="{Binding Observacoes}" TextWrapping="Wrap" VerticalAlignment="Stretch" MinHeight="60"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontSize="15"/>
+					</StackPanel>
+				</ScrollViewer>
+
+				<Button Grid.Row="2" Content="CONFIRMAR AGENDAMENTO" Command="{Binding AgendarCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}" 
+                        Background="#3498DB" BorderBrush="#3498DB" Foreground="White" 
+                        Height="50" FontSize="16" FontWeight="Bold" Margin="0,15,0,0"/>
+			</Grid>
+		</Border>
+
+		<Border Grid.Column="1" Background="White" CornerRadius="8" Padding="15" BorderBrush="#E0E0E0" BorderThickness="1">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15" VerticalAlignment="Center">
+					<materialDesign:PackIcon Kind="CalendarClock" Width="28" Height="28" Foreground="#2C3E50" Margin="0,0,10,0"/>
+					<TextBlock Text="Agenda do Dia" FontSize="22" FontWeight="Bold" Foreground="#2C3E50" VerticalAlignment="Center"/>
+					<TextBlock Text="{Binding DataSelecionada, StringFormat='{} - {0:dd/MM/yyyy}'}" FontSize="22" FontWeight="Bold" Foreground="#7F8C8D" VerticalAlignment="Center"/>
+				</StackPanel>
+
+				<DataGrid Grid.Row="1" ItemsSource="{Binding AgendamentosDoDia}" IsReadOnly="True" AutoGenerateColumns="False" 
+                          CanUserAddRows="False" Background="Transparent" BorderThickness="0"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E0E0E0" RowHeight="45">
+					<DataGrid.Columns>
+
+						<DataGridTextColumn Header="Hora" Binding="{Binding DataHoraAgendamento, StringFormat='{}{0:HH:mm}'}" Width="100">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="TextBlock">
+									<Setter Property="VerticalAlignment" Value="Center"/>
+									<Setter Property="FontWeight" Value="Bold"/>
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+						</DataGridTextColumn>
+
+						<DataGridTextColumn Header="Tutor" Binding="{Binding ClienteNome}" Width="2*">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="TextBlock">
+									<Setter Property="VerticalAlignment" Value="Center"/>
+									<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+						</DataGridTextColumn>
+
+						<DataGridTextColumn Header="Pet" Binding="{Binding PetNome}" Width="1*">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="TextBlock">
+									<Setter Property="VerticalAlignment" Value="Center"/>
+									<Setter Property="FontWeight" Value="SemiBold"/>
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+						</DataGridTextColumn>
+
+						<DataGridTextColumn Header="Serviço" Binding="{Binding ServicoNome}" Width="1.5*">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="TextBlock">
+									<Setter Property="VerticalAlignment" Value="Center"/>
+									<Setter Property="Foreground" Value="#555555"/>
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+						</DataGridTextColumn>
+
+						<DataGridTemplateColumn Header="Status" Width="110">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<Border x:Name="StatusBadge" CornerRadius="4" Padding="6,3" HorizontalAlignment="Left" VerticalAlignment="Center">
+										<TextBlock x:Name="StatusText" Text="{Binding Status}" FontSize="12" FontWeight="Bold"/>
+									</Border>
+									<DataTemplate.Triggers>
+										<DataTrigger Binding="{Binding Status}" Value="Agendado">
+											<Setter TargetName="StatusBadge" Property="Background" Value="#E8F8F5"/>
+											<Setter TargetName="StatusText" Property="Foreground" Value="#27AE60"/>
+										</DataTrigger>
+										<DataTrigger Binding="{Binding Status}" Value="Cancelado">
+											<Setter TargetName="StatusBadge" Property="Background" Value="#FCE4D6"/>
+											<Setter TargetName="StatusText" Property="Foreground" Value="#C0392B"/>
+										</DataTrigger>
+									</DataTemplate.Triggers>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+
+						<DataGridTemplateColumn Header="Ações" Width="100">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<Button Command="{Binding DataContext.CancelarAgendamentoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            Width="30" Height="30" Padding="0" Foreground="#E74C3C" ToolTip="Cancelar Agendamento">
+										<materialDesign:PackIcon Kind="Cancel" Width="18" Height="18"/>
+									</Button>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+
+					</DataGrid.Columns>
+				</DataGrid>
+			</Grid>
+		</Border>
+	</Grid>
+</UserControl>

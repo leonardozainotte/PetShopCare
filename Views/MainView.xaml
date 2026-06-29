@@ -19,15 +19,14 @@
 	</Window.DataContext>
 
 	<Window.Resources>
-		<DataTemplate DataType="{x:Type sys:String}">
-			<TextBlock Text="{Binding}" FontSize="24" FontWeight="Medium" Foreground="{StaticResource ColorTextSecondary}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		<DataTemplate DataType="{x:Type viewmodels:DashboardViewModel}">
+			<views:DashboardView/>
 		</DataTemplate>
-		
+
 		<DataTemplate DataType="{x:Type viewmodels:TutorViewModel}">
 			<views:TutorView />
 		</DataTemplate>
-		
+
 		<DataTemplate DataType="{x:Type viewmodels:PetViewModel}">
 			<views:PetView />
 		</DataTemplate>
@@ -38,6 +37,10 @@
 
 		<DataTemplate DataType="{x:Type viewmodels:ProdutoViewModel}">
 			<views:ProdutoView/>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type viewmodels:AgendamentoViewModel}">
+			<views:AgendamentoView/>
 		</DataTemplate>
 
 		<Style x:Key="MenuButtonStyle" TargetType="RadioButton">
@@ -138,9 +141,20 @@
 						<TextBlock Grid.Column="1" Text="Catálogo / Estoque" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
 					</Grid>
 				</RadioButton>
+
+				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirAgendamentoCommand}" Style="{StaticResource MenuButtonStyle}">
+					<Grid Margin="20,0,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<materialDesign:PackIcon Grid.Column="0" Kind="CalendarClock" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="1" Text="Agenda" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
+					</Grid>
+				</RadioButton>
 			</StackPanel>
 		</Border>
-
+		
 		<Grid Grid.Column="1">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="70"/>

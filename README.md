@@ -100,8 +100,18 @@ Construção do núcleo de frente de caixa comercial, com gestão de estado inte
 * **Transações Atômicas (ACID):** Salvamento robusto utilizando `IDbTransaction` do Dapper. Orquestração da gravação da Venda, vínculo dos Itens, subtração do Estoque Físico e lançamento no Livro Razão num único *Commit*, com *Rollback* de segurança ativado pelo bloco `catch`.
 * **Globalização Sistêmica (`pt-BR`):** Injeção em nível de núcleo (`App.xaml.cs`) da cultura brasileira para formatação monetária (R$) e temporal, unificando as máscaras visuais do XAML de forma definitiva.
 
-### 🚧 Etapa 11: Módulo de Agendamentos e Serviços (Próximo Passo)
+### ✅ Etapa 11: Dashboard Analítico e Inteligência de Negócio
 
-* Estruturação de agenda interativa para controle de Banho, Tosa e Consultas Clínicas.
-* Mapeamento relacional de tríade (Cliente -> Pet -> Serviço).
-* Controle de status operacionais (Agendado, Em Andamento, Concluído, Cancelado).
+Transformação da tela inicial num centro de telemetria para monitoramento tático das operações diárias.
+
+* **Integração Gráfica (LiveCharts2):** Instalação e orquestração do motor de renderização `SkiaSharp` acoplado ao WPF para desenhar gráficos cartesianos de curva de faturamento. Ajustes finos de compatibilidade no `.csproj` e silenciamento de avisos (`<NoWarn>`) para garantir um ambiente de compilação imaculado.
+* **Telemetria e Injeção de Repositórios:** Centralização do processamento de métricas na `DashboardViewModel`. Consultas estruturadas via repasse de chamadas ao `VendaRepository`, `ProdutoService` e `OrdemServicoService` para extração de indicadores em tempo real.
+* **Arquitetura de Layout Fluido:** Refatoração do XAML isolando as sub-regiões em linhas definidas nativamente pela propriedade `Grid.RowDefinitions`, eliminando quebras visuais e sobreposições de renderização entre os Cards de Resumo, Gráfico e DataGrid de Alerta.
+* **Prevenção de Ruptura de Estoque:** Tabela inteligente embutida no Dashboard que monitora proativamente os produtos com saldo igual ou inferior à margem de segurança configurada.
+* **Inicialização Segura:** Ajuste do ciclo de vida (*startup*) no contêiner principal da aplicação (`MainViewModel`) para renderização tipada do painel de métricas usando alocação real de objetos.
+
+### 🚧 Etapa 12: Módulo de Serviços (Próximo Passo)
+
+* Implementação completa do CRUD administrativo de serviços prestados pelo petshop (Banho, Tosa, Consulta Veterinária, etc.).
+* Parametrização dinâmica de valores base, descrições e controle de disponibilidade.
+* Substituição da carga temporária de dados (Mock) pelo fluxo real integrado ao banco de dados SQLite.
