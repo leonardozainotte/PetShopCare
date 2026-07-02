@@ -15,8 +15,7 @@ namespace PetShopCare.Services {
             return _repository.BuscarTodos();
         }
 
-        // Se futuramente quiser validar regras ao criar um serviço novo, a lógica entra aqui
-        public void Inserir(Servico servico) {
+        public void Adicionar(Servico servico) {
             if (string.IsNullOrWhiteSpace(servico.Nome))
                 throw new ArgumentException("O nome do serviço é obrigatório.");
 
@@ -26,7 +25,24 @@ namespace PetShopCare.Services {
             if (servico.TempoEstimadoMinutos <= 0)
                 throw new ArgumentException("O tempo estimado deve ser maior que zero.");
 
-            _repository.Inserir(servico);
+            _repository.Adicionar(servico);
+        }
+
+        public void Atualizar(Servico servico) {
+            if (string.IsNullOrWhiteSpace(servico.Nome))
+                throw new ArgumentException("O nome do serviço é obrigatório.");
+
+            if (servico.Preco < 0)
+                throw new ArgumentException("O preço não pode ser negativo.");
+
+            if (servico.TempoEstimadoMinutos <= 0)
+                throw new ArgumentException("O tempo estimado deve ser maior que zero.");
+
+            _repository.Atualizar(servico);
+        }
+
+        public void Excluir(int id) {
+            _repository.Excluir(id);
         }
     }
 }

@@ -31,6 +31,10 @@
 			<views:PetView />
 		</DataTemplate>
 
+		<DataTemplate DataType="{x:Type viewmodels:ServicoViewModel}">
+			<views:ServicoView/>
+		</DataTemplate>
+
 		<DataTemplate DataType="{x:Type viewmodels:PDVViewModel}">
 			<views:PDVView />
 		</DataTemplate>
@@ -117,6 +121,17 @@
 						</Grid.ColumnDefinitions>
 						<materialDesign:PackIcon Grid.Column="0" Kind="Dog" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="1" Text="Prontuários Pets" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
+					</Grid>
+				</RadioButton>
+
+				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirServicosCommand}" Style="{StaticResource MenuButtonStyle}">
+					<Grid Margin="20,0,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<materialDesign:PackIcon Grid.Column="0" Kind="ContentCut" Width="24" Height="24" Foreground="{StaticResource ColorPrimary}" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="1" Text="Serviços" FontSize="16" FontWeight="Medium" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center" Margin="15,0,0,0"/>
 					</Grid>
 				</RadioButton>
 

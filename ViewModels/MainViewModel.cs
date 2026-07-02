@@ -23,6 +23,7 @@ namespace PetShopCare.ViewModels
         public ICommand AbrirProdutosCommand { get; }
         public ICommand AbrirPdvCommand { get; }
         public ICommand AbrirAgendamentoCommand { get; }
+        public ICommand AbrirServicosCommand { get; }
 
         public MainViewModel()
         {
@@ -33,6 +34,7 @@ namespace PetShopCare.ViewModels
             AbrirTutoresCommand = new RelayCommand(p => TelaAtual = new TutorViewModel());
             AbrirProntuariosCommand = new RelayCommand(p => TelaAtual = new PetViewModel());
             AbrirProdutosCommand = new RelayCommand(p => TelaAtual = new ProdutoViewModel());
+            AbrirServicosCommand = new RelayCommand(p => TelaAtual = new ServicoViewModel());
 
             // Rotas Operacionais
             AbrirPdvCommand = new RelayCommand(p => TelaAtual = new PDVViewModel());

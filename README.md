@@ -110,8 +110,27 @@ Transformação da tela inicial num centro de telemetria para monitoramento tát
 * **Prevenção de Ruptura de Estoque:** Tabela inteligente embutida no Dashboard que monitora proativamente os produtos com saldo igual ou inferior à margem de segurança configurada.
 * **Inicialização Segura:** Ajuste do ciclo de vida (*startup*) no contêiner principal da aplicação (`MainViewModel`) para renderização tipada do painel de métricas usando alocação real de objetos.
 
-### 🚧 Etapa 12: Módulo de Serviços (Próximo Passo)
+### ✅ Etapa 12: Módulo de Serviços e Abstração de Janelas (Pop-ups)
 
-* Implementação completa do CRUD administrativo de serviços prestados pelo petshop (Banho, Tosa, Consulta Veterinária, etc.).
-* Parametrização dinâmica de valores base, descrições e controle de disponibilidade.
-* Substituição da carga temporária de dados (Mock) pelo fluxo real integrado ao banco de dados SQLite.
+Implementação do CRUD administrativo de serviços padronizando a experiência visual de cadastros modais.
+
+* **Arquitetura Desacoplada:** Separação estrutural entre listagem (`ServicoView` via UserControl) e formulário de dados (`CadastroServicoView` via Window flutuante).
+* **Injeção de Ações (Action Injection):** Utilização de `Action` delegada (`FecharJanela`) comunicando o Code-Behind à ViewModel, permitindo o encerramento seguro da janela modal após as operações de `INSERT` ou `UPDATE` sem violar a pureza do padrão MVVM.
+* **Mitigação de Exceções XAML:** Resolução de erros de compilação gráfica (`XamlParseException` e `TypeConverterMarkupExtension`) causados por obsolescência de ícones no dicionário do Material Design, aplicando chaves consistentes e seguras (`ContentCut`).
+* **Tratamento de Estado Numérico no XAML:** Otimização do componente `MaterialDesignFloatingHintTextBox` lidando nativamente com valores não-nulos de *Value Types* (`decimal`, `int`), preservando o layout de formulário limpo sem onerar o C# com conversões de string desnecessárias.
+
+### ✅ Etapa 13: Módulo de Agendamentos e Orquestração Relacional
+
+Engenharia da tela de agenda centralizando as entidades do domínio para controle de fluxo de atendimento.
+
+* **Layout Híbrido:** Interface particionada lateralmente (Formulário à esquerda, Agenda Diária à direita) focando em produtividade e leitura rápida de horários.
+* **Seleção em Cascata (UX/UI):** Implementação de filtro inteligente em memória RAM onde o `ComboBox` de Pets reage dinamicamente ao `ClienteId` selecionado pelo utilizador, impedindo agendamentos para animais errados.
+* **Integração de Tríade de Dados:** Orquestração de salvamento conectando e persistindo as três pontas relacionais do sistema (Tutor + Pet + Serviço) numa única entidade e tabela.
+
+### 🚧 Etapa 14: Segurança, Resiliência e Tangibilidade (Próximo Passo)
+
+Transformar o sistema de um projeto maduro num software preparado para o rigor do mundo real.
+
+* **Prevenção contra Perda de Dados:** Implementação de rotinas de Backup embutidas para gerar cópias seguras do banco `PetShopCare.db`.
+* **Controle de Acesso:** Construção da barreira de autenticação (Login) e parametrização de permissões de utilizadores (Ex: Administrador vs. Atendente de Caixa).
+* **Saída Documental:** Geração e exportação de recibos e ordens de serviço em formato PDF nativo.
