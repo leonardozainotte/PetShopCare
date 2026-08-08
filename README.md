@@ -97,8 +97,7 @@ Consolidação do sistema para uso no mercado real.
 * **Controle de Acesso Baseado em Cargos (RBAC):** Restrições sistêmicas dinâmicas via `MainViewModel`. Administradores, Atendentes e Operadores possuem UI e permissões de menu adaptadas aos seus perfis de segurança.
 * **Gestão de Equipe:** Módulo CRUD para controle de funcionários e redefinição segura de senhas (*hash*).
 
-### 🚧 Etapa 15: Infraestrutura Produtiva e Deploy (Próximo Passo)
-Preparação final para entrega comercial (*Release*).
-* **Rotinas de Backup:** Implementação de exportação de segurança do arquivo `.db` para proteção contra falhas e *ransomware*.
-* **Tratamento Global de Exceções:** Configuração do `DispatcherUnhandledException` para mitigar *crashes* silenciosos e gerar arquivos de log rastreáveis.
-* **Empacotamento (Instalador):** Criação do executável de instalação e ambiente produtivo isolado.
+### ✅ Etapa 15: Infraestrutura Produtiva, Resiliência e Deploy
+Preparação final para entrega comercial e publicação em portfólio.
+* **Tratamento Global de Exceções:** Configuração do `DispatcherUnhandledException` na camada central da aplicação (`App.xaml.cs`) para interceptar erros críticos não tratados, mitigar *crashes* silenciosos e gerar logs rastreáveis em disco (`error_log.txt`).
+* **Empacotamento (Single File & Self-Contained):** Geração de build otimizada em arquivo executável único contendo o runtime do .NET 8 embutido, garantindo portabilidade total para testes imediatos sem dependências externas.
