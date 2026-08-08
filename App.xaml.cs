@@ -1,8 +1,10 @@
-﻿using System.Globalization;
+﻿using PetShopCare.Database;
+using PetShopCare.ViewModels;
+using PetShopCare.Views;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Markup;
-using PetShopCare.Database;
 
 namespace PetShopCare
 {
@@ -12,18 +14,58 @@ namespace PetShopCare
         {
             base.OnStartup(e);
 
-            // 1. Inicia o banco de dados (Sua lógica original mantida intacta)
             DatabaseConfig.InitializeDatabase();
 
-            // 2. Define a cultura padrão do sistema para o Brasil (Moeda = R$, Data = dd/MM/yyyy)
             var cultureInfo = new CultureInfo("pt-BR");
             Thread.CurrentThread.CurrentCulture = cultureInfo;
             Thread.CurrentThread.CurrentUICulture = cultureInfo;
 
-            // 3. Força o motor visual do XAML a renderizar seguindo a cultura definida acima
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement),
                 new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(cultureInfo.IetfLanguageTag)));
+
+            // ====================================================================
+            // MANTÉM O PROCESSO VIVO INDEPENDENTE DE QUAIS JANELAS ESTÃO ABERTAS
+            // ====================================================================
+            Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+            bool rodandoSistema = true;
+
+            while (rodandoSistema)
+            {
+                var loginViewModel = new LoginViewModel();
+                var loginView = new LoginView
+                {
+                    DataContext = loginViewModel
+                };
+
+                // Abre sempre como Dialog (Isso corrige o erro que você encontrou)
+                bool? resultadoLogin = loginView.ShowDialog();
+
+                if (resultadoLogin == true && loginViewModel.UsuarioAutenticado != null)
+                {
+                    var mainViewModel = new MainViewModel(loginViewModel.UsuarioAutenticado);
+                    var mainView = new MainView
+                    {
+                        DataContext = mainViewModel
+                    };
+
+                    Application.Current.MainWindow = mainView;
+                    mainView.ShowDialog();
+
+                    if (!mainViewModel.IsLogoutRequested)
+                    {
+                        rodandoSistema = false;
+                    }
+                }
+                else
+                {
+                    rodandoSistema = false;
+                }
+            }
+
+            // Desliga a aplicação de forma limpa e segura
+            Shutdown();
         }
     }
 }

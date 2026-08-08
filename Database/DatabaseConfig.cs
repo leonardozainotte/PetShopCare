@@ -19,6 +19,18 @@ namespace PetShopCare.Database
             {
                 connection.Open();
 
+                string sqlUsuarios = @"
+                    CREATE TABLE IF NOT EXISTS Usuarios (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Nome TEXT NOT NULL,
+                        Usuario TEXT NOT NULL UNIQUE,
+                        SenhaHash TEXT NOT NULL,
+                        Cargo TEXT,
+                        Status TEXT,
+                        DataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        Perfil INTEGER NOT NULL DEFAULT 1
+                    );";
+
                 string createTableQuery = @"
                     CREATE TABLE IF NOT EXISTS Clientes (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -119,6 +131,12 @@ namespace PetShopCare.Database
                         FOREIGN KEY(ProdutoId) REFERENCES Produtos(Id)
                     );";
 
+                // Executa a criação da tabela Usuarios
+                using (var commandUsuarios = new SqliteCommand(sqlUsuarios, connection))
+                {
+                    commandUsuarios.ExecuteNonQuery();
+                }
+
                 // Executa a criação da tabela Clientes
                 using (var command = new SqliteCommand(createTableQuery, connection))
                 {
@@ -167,6 +185,29 @@ namespace PetShopCare.Database
                     commandVendaItens.ExecuteNonQuery();
                 }
 
+                // =========================================================================
+                // SEEDS AUTOMÁTICOS
+                // =========================================================================
+
+                // SEED: Cria o usuário Admin automaticamente se não existir nenhum
+                string checkUsuarios = "SELECT COUNT(*) FROM Usuarios";
+                using (var commandCheckUsuarios = new SqliteCommand(checkUsuarios, connection))
+                {
+                    long count = (long)commandCheckUsuarios.ExecuteScalar();
+                    if (count == 0)
+                    {
+                        string seedUsuarios = @"
+                            INSERT INTO Usuarios (Nome, Usuario, SenhaHash, Cargo, Status, Perfil) 
+                            VALUES ('Administrador do Sistema', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Gerente', 'Ativo', 1);";
+
+                        using (var commandSeedUsuarios = new SqliteCommand(seedUsuarios, connection))
+                        {
+                            commandSeedUsuarios.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                // SEED: Serviços
                 string checkServicos = "SELECT COUNT(*) FROM Servicos";
                 using (var commandCheck = new SqliteCommand(checkServicos, connection))
                 {

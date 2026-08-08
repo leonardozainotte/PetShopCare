@@ -1,4 +1,6 @@
+using System.Windows;
 using System.Windows.Input;
+using PetShopCare.Models;
 
 namespace PetShopCare.ViewModels
 {
@@ -16,7 +18,29 @@ namespace PetShopCare.ViewModels
             }
         }
 
-        // 1. Declaração de todas as rotas possíveis
+        public Usuario UsuarioLogado { get; private set; }
+
+        // =========================================================================
+        // PROPRIEDADES DE CONTROLE DE ACESSO VISUAL (RBAC)
+        // =========================================================================
+
+        public string SaudacaoUsuario => $"Olá, {UsuarioLogado.Nome}";
+        public bool IsLogoutRequested { get; private set; } = false;
+
+        // Fazemos o cast (int) para comparar o Enumerador com o número do banco de dados
+        public Visibility VisibilidadeDashboard =>
+            (int)UsuarioLogado.Perfil == 1 ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility VisibilidadeEstoque =>
+            (int)UsuarioLogado.Perfil == 1 ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility VisibilidadePDV =>
+            ((int)UsuarioLogado.Perfil == 1 || (int)UsuarioLogado.Perfil == 2)
+            ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility VisibilidadeConfiguracoes =>
+            (int)UsuarioLogado.Perfil == 1 ? Visibility.Visible : Visibility.Collapsed;
+
         public ICommand AbrirDashboardCommand { get; }
         public ICommand AbrirTutoresCommand { get; }
         public ICommand AbrirProntuariosCommand { get; }
@@ -24,26 +48,47 @@ namespace PetShopCare.ViewModels
         public ICommand AbrirPdvCommand { get; }
         public ICommand AbrirAgendamentoCommand { get; }
         public ICommand AbrirServicosCommand { get; }
+        public ICommand LogoutCommand { get; }
+        public ICommand AbrirConfiguracoesCommand { get; }
 
-        public MainViewModel()
+        public MainViewModel(Usuario usuario)
         {
-            // 2. Mapeamento das ações (O que cada botão faz)
-            AbrirDashboardCommand = new RelayCommand(p => TelaAtual = new DashboardViewModel());
+            UsuarioLogado = usuario;
 
-            // Rotas de Cadastros e Catálogo
+            AbrirDashboardCommand = new RelayCommand(p => TelaAtual = new DashboardViewModel());
             AbrirTutoresCommand = new RelayCommand(p => TelaAtual = new TutorViewModel());
             AbrirProntuariosCommand = new RelayCommand(p => TelaAtual = new PetViewModel());
             AbrirProdutosCommand = new RelayCommand(p => TelaAtual = new ProdutoViewModel());
             AbrirServicosCommand = new RelayCommand(p => TelaAtual = new ServicoViewModel());
-
-            // Rotas Operacionais
             AbrirPdvCommand = new RelayCommand(p => TelaAtual = new PDVViewModel());
-
-            // Rota de Agendamento alinhada ao seu padrão!
             AbrirAgendamentoCommand = new RelayCommand(p => TelaAtual = new AgendamentoViewModel());
+            LogoutCommand = new RelayCommand(p => RealizarLogout());
+            AbrirConfiguracoesCommand = new RelayCommand(p => TelaAtual = new ConfiguracoesViewModel());
 
-            // 3. Define a tela inicial obrigatória
-            TelaAtual = new DashboardViewModel();
+            // Redirecionamento inicial baseado no Perfil
+            if ((int)UsuarioLogado.Perfil == 1)
+            {
+                TelaAtual = new DashboardViewModel();
+            }
+            else
+            {
+                TelaAtual = new TutorViewModel();
+            }
+        }
+
+        private void RealizarLogout()
+        {
+            // Avisa o maestro (App.xaml.cs) que o fechamento foi proposital pelo botão
+            IsLogoutRequested = true;
+
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is Views.MainView)
+                {
+                    window.Close();
+                    break;
+                }
+            }
         }
     }
 }

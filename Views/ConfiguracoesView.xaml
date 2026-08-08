@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="PetShopCare.Views.ConfiguracoesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{StaticResource ColorBackground}">
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- COLUNA ESQUERDA: FORMULÁRIO -->
+        <Border Grid.Column="0" Background="White" CornerRadius="8" Padding="20">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="1"/>
+            </Border.Effect>
+
+            <StackPanel>
+                <TextBlock Text="Novo Funcionário" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource ColorPrimary}" Margin="0,0,0,20"/>
+
+                <TextBox Text="{Binding Nome, UpdateSourceTrigger=PropertyChanged}" 
+                         materialDesign:HintAssist.Hint="Nome Completo" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,0,0,15"/>
+
+                <TextBox Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" 
+                         materialDesign:HintAssist.Hint="Nome de Usuário (Login)" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,0,0,15"/>
+
+                <TextBox Text="{Binding SenhaInicial, UpdateSourceTrigger=PropertyChanged}" 
+                         materialDesign:HintAssist.Hint="Senha Inicial" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,0,0,15"/>
+
+                <ComboBox SelectedValue="{Binding PerfilSelecionado}" 
+                          SelectedValuePath="Tag"
+                          materialDesign:HintAssist.Hint="Nível de Acesso" 
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
+                          Margin="0,0,0,30">
+                    <ComboBoxItem Content="Administrador (Tudo)" Tag="1"/>
+                    <ComboBoxItem Content="Atendimento (Sem Estoque)" Tag="2"/>
+                    <ComboBoxItem Content="Operacional (Apenas Pets/Agenda)" Tag="3"/>
+                </ComboBox>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Command="{Binding SalvarUsuarioCommand}" 
+                            Content="{Binding TextoBotaoSalvar}" 
+                            Height="45" FontSize="14" 
+                            Background="{StaticResource ColorPrimary}" 
+                            BorderThickness="0"
+                            Style="{StaticResource MaterialDesignRaisedButton}"/>
+
+                    <Button Grid.Column="2" Command="{Binding LimparFormularioCommand}" 
+                            Content="Cancelar / Limpar" 
+                            Height="45" FontSize="14" 
+                            Background="{StaticResource ColorDanger}" 
+                            BorderThickness="0"
+                            Style="{StaticResource MaterialDesignRaisedButton}"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- COLUNA DIREITA: TABELA DE USUÁRIOS -->
+        <Border Grid.Column="2" Background="White" CornerRadius="8" Padding="20">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="1"/>
+            </Border.Effect>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Equipe Registrada" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource ColorTextPrimary}" Margin="0,0,0,15"/>
+
+                <DataGrid Grid.Row="1" ItemsSource="{Binding ListaUsuarios}" 
+                          SelectedItem="{Binding UsuarioSelecionado}"
+                          AutoGenerateColumns="False" 
+                          CanUserAddRows="False" 
+                          IsReadOnly="True"
+                          Background="White"
+                          RowHeight="40">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                        <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="*"/>
+                        <DataGridTextColumn Header="Usuário" Binding="{Binding Login}" Width="200"/>
+                        <DataGridTextColumn Header="Cargo" Binding="{Binding Cargo}" Width="150"/>
+                        <DataGridTextColumn Header="Perfil" Binding="{Binding Perfil}" Width="150"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

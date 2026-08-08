@@ -1,13 +1,12 @@
 ﻿<Application x:Class="PetShopCare.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             StartupUri="Views/MainView.xaml">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-			<materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Teal" SecondaryColor="Orange" />
-			<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+				<materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Teal" SecondaryColor="Orange" />
+				<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<SolidColorBrush x:Key="ColorPrimary" Color="#2cbbc3" />
@@ -15,11 +14,11 @@
 			<SolidColorBrush x:Key="ColorAccent" Color="#ff9934" />
 			<SolidColorBrush x:Key="ColorWarning" Color="#f8f246" />
 			<SolidColorBrush x:Key="ColorThemeDark" Color="#8c5826" />
-
 			<SolidColorBrush x:Key="ColorBackground" Color="#F5F6FA" />
 			<SolidColorBrush x:Key="ColorSurface" Color="#FFFFFF" />
 			<SolidColorBrush x:Key="ColorTextPrimary" Color="#2D3436" />
 			<SolidColorBrush x:Key="ColorTextSecondary" Color="#636E72" />
+			<SolidColorBrush x:Key="ColorDanger" Color="#E74C3C"/>
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>

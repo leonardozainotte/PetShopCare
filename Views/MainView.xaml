@@ -9,16 +9,16 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="PetShopCare" Height="720" Width="1280"
-		Icon="pack://application:,,,/Images/logo.png"
+        Icon="pack://application:,,,/Images/logo.png"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Background="{StaticResource ColorBackground}">
 
-	<Window.DataContext>
-		<viewmodels:MainViewModel />
-	</Window.DataContext>
-
 	<Window.Resources>
+		<DataTemplate DataType="{x:Type viewmodels:ConfiguracoesViewModel}">
+			<views:ConfiguracoesView/>
+		</DataTemplate>
+		
 		<DataTemplate DataType="{x:Type viewmodels:DashboardViewModel}">
 			<views:DashboardView/>
 		</DataTemplate>
@@ -85,13 +85,14 @@
 		<Border Grid.Column="0" Background="{StaticResource ColorSurface}" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
 			<StackPanel>
 				<Image Source="pack://application:,,,/Images/logo.png"
-					   Height="80" Width="100"
-					   Margin="0,30,0,0"
-					   RenderOptions.BitmapScalingMode="HighQuality"/>
-				
+                       Height="80" Width="100"
+                       Margin="0,30,0,0"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+
 				<TextBlock Text="PetShop Care" FontSize="26" FontWeight="ExtraBold" Foreground="{StaticResource ColorPrimary}" HorizontalAlignment="Center" Margin="0,30,0,40"/>
-			
-				<RadioButton GroupName="MenuLateral" IsChecked="True" Command="{Binding AbrirDashboardCommand}" Style="{StaticResource MenuButtonStyle}">
+
+				<!-- VISIBILIDADE DO DASHBOARD APLICADA AQUI -->
+				<RadioButton GroupName="MenuLateral" IsChecked="True" Command="{Binding AbrirDashboardCommand}" Style="{StaticResource MenuButtonStyle}" Visibility="{Binding VisibilidadeDashboard}">
 					<Grid Margin="20,0,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -135,7 +136,8 @@
 					</Grid>
 				</RadioButton>
 
-				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirPdvCommand}" Style="{StaticResource MenuButtonStyle}">
+				<!-- VISIBILIDADE DO PDV APLICADA AQUI -->
+				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirPdvCommand}" Style="{StaticResource MenuButtonStyle}" Visibility="{Binding VisibilidadePDV}">
 					<Grid Margin="20,0,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -146,7 +148,8 @@
 					</Grid>
 				</RadioButton>
 
-				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirProdutosCommand}" Style="{StaticResource MenuButtonStyle}">
+				<!-- VISIBILIDADE DO ESTOQUE APLICADA AQUI -->
+				<RadioButton GroupName="MenuLateral" Command="{Binding AbrirProdutosCommand}" Style="{StaticResource MenuButtonStyle}" Visibility="{Binding VisibilidadeEstoque}">
 					<Grid Margin="20,0,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -169,7 +172,7 @@
 				</RadioButton>
 			</StackPanel>
 		</Border>
-		
+
 		<Grid Grid.Column="1">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="70"/>
@@ -179,10 +182,30 @@
 				<Grid>
 					<TextBlock Text="Dashboard Geral" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource ColorTextPrimary}" VerticalAlignment="Center"/>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-						<TextBlock Text="Olá, Operador" FontSize="14" Foreground="{StaticResource ColorTextSecondary}" VerticalAlignment="Center" Margin="0,0,15,0"/>
-						<Button Width="40" Height="40" Background="#F39C12" BorderThickness="0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+
+						<!-- 1. SAUDAÇÃO DINÂMICA DO USUÁRIO -->
+						<TextBlock Text="{Binding SaudacaoUsuario}" FontSize="14" Foreground="{StaticResource ColorTextSecondary}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+						<!-- 2. BOTÃO DE CONFIGURAÇÕES (Engrenagem) -->
+						<Button Command="{Binding AbrirConfiguracoesCommand}"
+								Visibility="{Binding VisibilidadeConfiguracoes}"
+								Style="{StaticResource MaterialDesignIconButton}"
+								Width="40" Height="40"
+								Margin="0,0,15,0"
+								ToolTip="Administrar Funcionários">
+							<materialDesign:PackIcon Kind="Cog" Foreground="#7F8C8D" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Button>
+
+						<!-- 3. BOTÃO DE LOGOUT -->
+						<Button Command="{Binding LogoutCommand}"
+								Width="40" Height="40"
+								Background="#F39C12"
+								BorderThickness="0"
+								Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+								ToolTip="Sair do Sistema">
 							<materialDesign:PackIcon Kind="Logout" Foreground="White" Width="20" Height="20"/>
 						</Button>
+
 					</StackPanel>
 				</Grid>
 			</Border>
